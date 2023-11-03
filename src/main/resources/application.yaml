@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/book_crossing
+    username: postgres
+    password: ENC(hh41sUty7jf5Y7GKB1LOkpxNWSt8JLEY2AsEFcIrYQlHILonTvH9CgZP58lein3kTTtGl3ZBFcDCNJfMsPATWA==)
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+       ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+jasypt:
+  encryptor:
+    password: postgres
+
