@@ -21,11 +21,11 @@ public class User {
     @Column(name = "encoded_password", nullable = false)
     private String password;
     private byte[] photo;
-
+    private Role role = Role.USER_ROLE; //by default will be USER_ROLE
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")
     private Book book;
-    private Role role = Role.USER_ROLE; //by default will be USER_ROLE
+
 }

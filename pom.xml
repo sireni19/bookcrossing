@@ -58,6 +58,12 @@
             <version>3.0.2</version>
         </dependency>
 <!--1]-->
+<!--     [2 for validation fields in entity classes-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+<!--2]-->
     </dependencies>
 
     <build>
