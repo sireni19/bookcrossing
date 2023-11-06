@@ -1,16 +1,23 @@
 package com.prokopovich.bookcrossing.controllers;
 
+import com.prokopovich.bookcrossing.dto.UserDtoToShow;
 import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
+import com.prokopovich.bookcrossing.entities.Role;
+import com.prokopovich.bookcrossing.exceptions.AdminException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateCityException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateLocationException;
 import com.prokopovich.bookcrossing.services.CityService;
 import com.prokopovich.bookcrossing.services.LocationService;
+import com.prokopovich.bookcrossing.services.UserService;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,13 +28,14 @@ import java.util.stream.Collectors;
 public class AdminController {
     private CityService cityService;
     private LocationService locationService;
+    private UserService userService;
 
     @Autowired
-    public AdminController(CityService cityService, LocationService locationService) {
+    public AdminController(CityService cityService, LocationService locationService, UserService userService) {
         this.cityService = cityService;
         this.locationService = locationService;
+        this.userService = userService;
     }
-
 
     @GetMapping("")
     public String showActionsPage() {
@@ -70,7 +78,7 @@ public class AdminController {
                                 .map(Location::getAddress)  // value - list of addresses(List<Strings>)
                                 .collect(Collectors.toList()) // the address list is going to the new list.
                 ));
-        
+
         model.addAttribute("addressesInCity", cityAddressMap);
         return "settings/locations";
     }
@@ -100,8 +108,51 @@ public class AdminController {
     }
 
     @PostMapping("/locations/delete")
-    public String deleteLocation(@RequestParam(name = "addressToDelete") String address){
+    public String deleteLocation(@RequestParam(name = "addressToDelete") String address) {
         locationService.deleteLocationByAddress(address);
         return "redirect:/admin/actions/locations";
+    }
+
+    @GetMapping("/users")
+    public String showUsers(@RequestParam(name = "query", required = false) String username, Model model) {
+        if (username == null) {
+            return "settings/users";
+        } else if (username != null) {
+            try {
+                UserDtoToShow dto = userService.getUserDtoToShow(username);
+                model.addAttribute("requiredUser", dto);
+                model.addAttribute("roles", Arrays.stream(Role.values()).filter(x->x!=dto.getRole()).collect(Collectors.toList()));
+                return "/settings/users";
+            } catch (NoResultException e) {
+                model.addAttribute("errorMessage", "No such a user with that username: " + username);
+                return "settings/error";
+            }
+        }
+        return "settings/users";
+    }
+
+    @PostMapping("/users/delete")
+    public ModelAndView deleteUser(@RequestParam(name = "userToDelete") String username) {
+        ModelAndView modelAndView = new ModelAndView("settings/users");
+        try {
+            userService.deleteUserByUsername(username);
+            modelAndView.addObject("result", "User with username " + username + " was deleted successfully");
+            return modelAndView;
+        } catch (AdminException e) {
+            modelAndView.addObject("result", e.getMessage());
+            return modelAndView;
+        }
+    }
+    @PostMapping("/users/update")
+    public String updateUser(@RequestParam(name = "selectedRole",required = false)Role newRole, @RequestParam(name = "userForRoleChange")String username,Model model){
+            try {
+                UserDtoToShow dto=userService.updateUserRole(username, newRole);
+                model.addAttribute("newroleresult","User with username " + username + " now has a new role: "+newRole);
+                model.addAttribute("updatedUser",dto);
+                return "/settings/users";
+            }catch (AdminException e){
+                model.addAttribute("newroleresult", e.getMessage());
+                return "/settings/users";
+            }
     }
 }

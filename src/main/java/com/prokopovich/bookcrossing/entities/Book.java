@@ -26,7 +26,7 @@ public class Book {
     private Genre genre;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

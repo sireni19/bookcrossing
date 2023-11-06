@@ -22,10 +22,13 @@ public class User {
     private String password;
     private byte[] photo;
     private Role role = Role.USER_ROLE; //by default will be USER_ROLE
+    @Column(name = "is_activate",nullable = true)
+    private boolean isActivate =false;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.DETACH,CascadeType.REFRESH},fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")
     private Book book;
+
 
 }
