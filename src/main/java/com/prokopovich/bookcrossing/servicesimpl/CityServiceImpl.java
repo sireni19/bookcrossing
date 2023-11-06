@@ -1,7 +1,7 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
 import com.prokopovich.bookcrossing.entities.City;
-import com.prokopovich.bookcrossing.exceprions.DuplicateCityException;
+import com.prokopovich.bookcrossing.exceptions.DuplicateCityException;
 import com.prokopovich.bookcrossing.repositories.CityRepository;
 import com.prokopovich.bookcrossing.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,10 @@ public class CityServiceImpl implements CityService {
         }
     }
 
-
+    @Override
+    public City findCityByName(String name) {
+        return cityRepository.findCityByName(name);
+    }
 
     @Override
     public void modifyCity(String newName, Integer id) {

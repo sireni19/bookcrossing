@@ -6,12 +6,15 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "cities")
-public class City {
+public class City implements Serializable {
+    private static final long serialVersionUID = 1_111_1_0L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

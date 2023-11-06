@@ -1,4 +1,4 @@
-package com.prokopovich.bookcrossing.exceprions;
+package com.prokopovich.bookcrossing.exceptions;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +9,12 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(DuplicateCityException.class)
     public ModelAndView handleDuplicateCityException(DuplicateCityException exDup) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("errorMessage", exDup.getMessage());
+        return modelAndView;
+    }
+    @ExceptionHandler(DuplicateLocationException.class)
+    public ModelAndView handleDuplicateCityException(DuplicateLocationException exDup) {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("errorMessage", exDup.getMessage());
         return modelAndView;
