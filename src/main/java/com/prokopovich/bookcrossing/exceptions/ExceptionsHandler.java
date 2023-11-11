@@ -15,9 +15,9 @@ public class ExceptionsHandler {
         return modelAndView;
     }
     @ExceptionHandler(DuplicateLocationException.class)
-    public ModelAndView handleDuplicateCityException(DuplicateLocationException exDup) {
+    public ModelAndView handleDuplicateLocationException(DuplicateLocationException exDupLoc) {
         ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("errorMessage", exDup.getMessage());
+        modelAndView.addObject("errorMessage", exDupLoc.getMessage());
         return modelAndView;
     }
     @ExceptionHandler(NoResultException.class)
@@ -28,6 +28,12 @@ public class ExceptionsHandler {
     }
     @ExceptionHandler(AdminException.class)
     public ModelAndView handleNoResultException(AdminException ax) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("errorMessage", ax.getMessage());
+        return modelAndView;
+    }
+    @ExceptionHandler(HostException.class)
+    public ModelAndView handleHostException(HostException ax) {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("errorMessage", ax.getMessage());
         return modelAndView;

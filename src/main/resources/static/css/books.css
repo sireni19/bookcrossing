@@ -1,0 +1,75 @@
+/**
+ * Базовые стили для всего сайта
+ */
+/*body {*/
+/*    position: relative;*/
+/*    font-family: 'Noto Sans', sans-serif;*/
+/*    font-size: 16px;*/
+/*    line-height: 1.4;*/
+/*    color: #000;*/
+/*    min-width: 320px;*/
+/*    overflow-x: hidden;*/
+/*    height: auto;*/
+/*}*/
+
+
+/**
+ * Другие стили
+ */
+
+.product {
+    margin-bottom: 30px;
+}
+
+.image {
+    margin-bottom: 10px;
+}
+
+.image img {
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.info h5 {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.rating {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+
+}
+
+.rating li {
+    display: inline-block;
+    color: goldenrod;
+}
+
+.info-price {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-to-cart {
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: forestgreen;
+    color: white;
+    border-radius: 10px;
+}
+
+.price {
+    font-weight: 700;
+    font-size: 17px;
+}

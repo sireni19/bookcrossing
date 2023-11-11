@@ -5,12 +5,14 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
+
 
 @Data
 @Entity
 @Table(name = "users")
-public class User {
-
+public class User implements Serializable {
+    private static final long serialVersionUID = 6_666_6_0L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,6 +31,10 @@ public class User {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")
     private Book book;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
 
 }

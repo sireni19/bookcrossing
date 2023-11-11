@@ -12,4 +12,5 @@ public interface CityService {
 
     public void modifyCity(String newName, Integer id);
     City findCityByName(String name);
+
 }

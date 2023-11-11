@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "cities")
 public class City implements Serializable {
-    private static final long serialVersionUID = 1_111_1_0L;
+    private static final long serialVersionUID = 3_333_3_0L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -13,14 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
+
     @Autowired
     public LocationServiceImpl(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
-
     @Override
-    public void addLocation(Location location) throws DuplicateLocationException {
+    public void saveLocation(Location location) throws DuplicateLocationException {
         if (locationRepository.findLocationByAddress(location.getAddress().trim()) == null) {
             locationRepository.save(location);
         } else {
@@ -38,6 +38,12 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location findLocationByAddress(String address) {
         return locationRepository.findLocationByAddress(address);
+    }
+
+    @Override
+    @Transactional
+    public void updateLocation(Location loc) {
+        locationRepository.updateLocation(loc.getId(), loc.getAddress());
     }
 
 }

@@ -17,15 +17,13 @@
     <div th:replace="~{settings/navigation :: navigation(Locations) }"/>
     <table>
         <tr th:each="entry:${addressesInCity}">
-           <td><p th:text="${entry.getKey()}" style = "font-size: 40px; font-weight: bold;"></p></td>
+           <td><p th:text="${entry.key}" style = "font-size: 40px; font-weight: bold;"></p></td>
             <table th:border="1">
-                <tr th:each="value:${entry.value}" th:size="120">
-                    <td th:text="${value}+'    '"></td>
-                    <td><form th:action="@{/admin/actions/locations/update}" method="post">
-                        <input type="hidden" th:name="oldAddress" th:value="${value}">
-                        <input type="text" th:name="updatedAddress" placeholder="Changed address"  style="height: 34px">
-                        <button  type="submit" class="btn btn-primary">Update</button>
-                    </form></td>
+                <tr th:each="value:${entry.getValue()}" th:size="120">
+                    <td th:text="${value}+''"></td>
+                        <td>
+                            <a th:href="@{/admin/actions/locations/updateform/{address}/{cityName}(address=${value}, cityName=${entry.key})}" class="btn btn-primary">Update</a>
+                        </td>
                     <td><form th:action="@{/admin/actions/locations/delete}" method="post">
                         <input type="hidden" th:name="addressToDelete" th:value="${value}">
                         <button  type="submit" class="btn btn-danger">Delete</button>

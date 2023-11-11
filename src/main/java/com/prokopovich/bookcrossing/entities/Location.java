@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "locations")
 @NoArgsConstructor
 public class Location implements Serializable {
-    private static final long serialVersionUID = 2_222_2_0L;
+    private static final long serialVersionUID = 5_555_5_0L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,10 @@ public class Location implements Serializable {
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+    @OneToMany(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "location_id")
+    private List<User> userList;
 
     public Location(String address) {
         this.address = address;

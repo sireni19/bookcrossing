@@ -3,10 +3,13 @@ package com.prokopovich.bookcrossing.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements Serializable {
+    private static final long serialVersionUID = 2_222_2_0L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +36,5 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE})
     @JoinColumn(name = "location_id")
     private Location location;
+    //TODO add 5-star rating
 }

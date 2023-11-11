@@ -7,6 +7,7 @@ import com.prokopovich.bookcrossing.entities.Role;
 import com.prokopovich.bookcrossing.exceptions.AdminException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateCityException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateLocationException;
+import com.prokopovich.bookcrossing.exceptions.HostException;
 import com.prokopovich.bookcrossing.services.CityService;
 import com.prokopovich.bookcrossing.services.LocationService;
 import com.prokopovich.bookcrossing.services.UserService;
@@ -40,6 +41,10 @@ public class AdminController {
     @GetMapping("")
     public String showActionsPage() {
         return "settings/full-functional";
+    }
+    @GetMapping("/q")//test end-point
+    public String showActionsPageq() {
+        return "q";
     }
 
     @GetMapping("/cities")
@@ -79,6 +84,7 @@ public class AdminController {
                                 .collect(Collectors.toList()) // the address list is going to the new list.
                 ));
 
+
         model.addAttribute("addressesInCity", cityAddressMap);
         return "settings/locations";
     }
@@ -90,7 +96,7 @@ public class AdminController {
         if (city != null) {
             location.setCity(city);
             try {
-                locationService.addLocation(location);
+                locationService.saveLocation(location);
             } catch (DuplicateLocationException e) {
                 model.addAttribute("errorMessage", e.getMessage());
                 return "settings/error";
@@ -99,13 +105,38 @@ public class AdminController {
         return "redirect:/admin/actions/locations";
     }
 
-    @PostMapping("/locations/update")
-    public String updateLocation(@RequestParam(name = "updatedAddress") String updatedAddress, @RequestParam(name = "oldAddress") String oldAddress) throws DuplicateLocationException {
-        Location location = locationService.findLocationByAddress(oldAddress);
-        location.setAddress(updatedAddress);
-        locationService.addLocation(location);
-        return "redirect:/admin/actions/locations";
+
+    @GetMapping("/locations/updateform/{address}/{cityName}")
+    public String updateLocationForm(@PathVariable(value = "address")String address,@PathVariable(name = "cityName") String cName,Model model) {
+        Location location =locationService.findLocationByAddress(address);
+        List<UserDtoToShow> hosts = userService.findHostsByLocationId(location.getId());
+        model.addAttribute("updloc",location);
+        model.addAttribute("updcity",cName);
+        model.addAttribute("hosts",hosts);
+        return "settings/loc-update";
     }
+    @PostMapping("/locations/update")
+    public String updateLocation(@ModelAttribute(value = "updloc")Location location, @RequestParam(value = "updcity",required = false)String cName,
+                                 @RequestParam(name = "locId",required = false)Integer locId,@RequestParam(name = "hostId",required = false)Integer hostId,
+                                 @RequestParam(name = "query",required = false)String username,Model model) {
+        if(hostId !=null&&locId==null){
+            userService.deleteHostLocation(hostId);
+        }
+        if(username!=null&&locId!=null){
+            try {
+                userService.setHostLocation(locId,username);
+            } catch (HostException e) {
+                model.addAttribute("errorMessage",e.getMessage());
+                return "settings/error";
+            }
+        }
+        City city = cityService.findCityByName(cName);
+        location.setCity(city);
+        locationService.updateLocation(location);
+
+        return "settings/loc-update";
+    }
+
 
     @PostMapping("/locations/delete")
     public String deleteLocation(@RequestParam(name = "addressToDelete") String address) {
@@ -143,6 +174,7 @@ public class AdminController {
             return modelAndView;
         }
     }
+
     @PostMapping("/users/update")
     public String updateUser(@RequestParam(name = "selectedRole",required = false)Role newRole, @RequestParam(name = "userForRoleChange")String username,Model model){
             try {
@@ -155,4 +187,5 @@ public class AdminController {
                 return "/settings/users";
             }
     }
+
 }
