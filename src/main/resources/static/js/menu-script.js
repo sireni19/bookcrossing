@@ -11,13 +11,15 @@ var headerText =
     '                <li><a href="#">Locations</a></li>\n' +
     '                <li><a href="#">Login</a></li>\n' +
     '                <li><a href="#">Registration</a></li>\n' +
-    '            </ul>\n' +
-    '            <a href="#" class="callback">Feedback</a>\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '</nav>' +
-    '</form>' +
-    '</div>';
+    '                <li><a href="/bcross/logout">Logout</a></li> '
+
+'            </ul>\n' +
+'            <a href="#" class="callback">Feedback</a>\n' +
+'        </div>\n' +
+'    </div>\n' +
+'</nav>' +
+'</form>' +
+'</div>';
 
 function setHeader() {
     var header = document.createElement("div");

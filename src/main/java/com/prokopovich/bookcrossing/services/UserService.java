@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.services;
 
+import com.prokopovich.bookcrossing.dto.UserDetailsImplDto;
 import com.prokopovich.bookcrossing.dto.UserDtoToShow;
 import com.prokopovich.bookcrossing.entities.Role;
 import com.prokopovich.bookcrossing.entities.User;
@@ -18,4 +19,7 @@ public interface UserService {
     User findUserById(Integer id);
     void deleteHostLocation(Integer hostId);
     void setHostLocation(Integer locId,String username) throws HostException;
+
+    User findUserByEmail(String email);
+    void saveUser(UserDetailsImplDto dto);
 }

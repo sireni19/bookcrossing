@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
+import com.prokopovich.bookcrossing.dto.UserDetailsImplDto;
 import com.prokopovich.bookcrossing.dto.UserDtoToShow;
 import com.prokopovich.bookcrossing.entities.Role;
 import com.prokopovich.bookcrossing.entities.User;
@@ -10,7 +11,8 @@ import com.prokopovich.bookcrossing.repositories.LocationRepository;
 import com.prokopovich.bookcrossing.repositories.UserRepository;
 import com.prokopovich.bookcrossing.services.UserService;
 import jakarta.persistence.NoResultException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +21,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private LocationRepository locationRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, LocationRepository locationRepository) {
-        this.userRepository = userRepository;
-        this.locationRepository = locationRepository;
-    }
 
     @Override
     public User findUserById(Integer id) {
@@ -128,5 +127,24 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    @Override
+    public User findUserByEmail(String email) {
+        Optional<User> optional=userRepository.findUserByEmail(email);
+            if(optional.isPresent()){
+                return optional.get();
+            }else {
+                return  UserNotFound.getInstance();
+            }
+    }
 
+    @Override
+    public void saveUser(UserDetailsImplDto dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername().trim());
+        user.setEmail(dto.getEmail().trim());
+
+        //encrypt the password once we integrate spring security
+        user.setPassword(passwordEncoder.encode(dto.getPassword().trim()));
+        userRepository.save(user);
+    }
 }

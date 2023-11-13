@@ -32,4 +32,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Transactional
     void setHostLocation(@Param("location") Location location, @Param("username") String username);
 
+    Optional<User> findUserByEmail(String email);
+    User save(User user);
 }
