@@ -38,4 +38,10 @@ public class ExceptionsHandler {
         modelAndView.addObject("errorMessage", ax.getMessage());
         return modelAndView;
     }
+    @ExceptionHandler(DuplicateBookException.class)
+    public ModelAndView handleDuplicateBookException(DuplicateBookException dx) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("errorMessage", dx.getMessage());
+        return modelAndView;
+    }
 }

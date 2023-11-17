@@ -48,13 +48,13 @@
             </form>
         </div>
     </div>
-    <!--    pop-up with case if user tries to delete administrator-->
-    <!--    <script th:inline="javascript">-->
-    <!--        var result = [[${result}]];-->
-    <!--        if (result.startsWith("You cannot delete")) {-->
-    <!--            alert(result);-->
-    <!--        }-->
-    <!--    </script>-->
+<!--        pop-up with case if user tries to delete administrator-->
+        <script th:inline="javascript">
+            var result = [[${result}]];
+            if (result.startsWith("You cannot delete")) {
+                alert(result);
+            }
+        </script>
 
     <div style="text-align: center"><p th:text="${newroleresult}" style="color:blue"></p></div>
     <div th:if="${updatedUser != null}">

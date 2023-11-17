@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new book</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"></script>
+    <style>
+        .form-label {
+            font-weight: bold;
+            font-size: 30px;
+        }
+    </style>
+
+</head>
+<body>
+<div style="width: 70%; margin: 0 auto;">
+    <form class="row g-3" th:action="@{/host/actions/books/new}" th:method="post" th:object="${newBook}"
+          enctype="multipart/form-data">
+        <div class="col-md-6">
+            <label class="form-label">Author:</label>
+            <select id="authorSelect" th:field="*{author}">
+                <option value="">Select an author</option>
+                <option th:each="author : ${authors}" th:value="${author.getId()}" th:text="${author.getName()}"></option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Subgenre:</label>
+            <select th:name="s_ubgenre"  th:field="*{subgenre}">
+                <option value="">Select a genre</option>
+                <option th:each="subgenre : ${subgenres}" th:value="${subgenre.getId()}" th:text="${subgenre.getName()}"></option>
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Title:</label>
+            <input th:name="t_itle" th:type="text" th:field="*{title}" class="form-control"
+                   placeholder="Enter the title of the book">
+        </div>
+        <div class="col-12">
+            <label class="form-label">ISBN/Number</label>
+            <input th:name="i_sbn" th:type="text" th:field="*{isbn}" class="form-control"
+                   placeholder="Enter 13 digit ISBN/Number">
+        </div>
+        <p>
+            <label style="font-weight: bold; font-size: 30px;">Image:</label>
+            <input type="file" th:name="img" accept="image/*,image/jpeg">
+        </p>
+
+        <div class="col-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Add new book</button>
+        </div>
+    </form>
+    <br>
+</div>
+
+<br>
+
+<div class="container" style="display: flex; justify-content: space-between;">
+    <div class="left-section" style="width: 45%;">
+        <p style="font-weight: bold; font-size: 25px;">New Author:
+        <button type="submit" id="authorToggleButton" onclick="toggleForm('newAuthor')">
+            <ion-icon name="chevron-down-outline"></ion-icon>
+        </button>
+        <form id="newAuthor" style="display: none;" th:action="@{/host/actions/addAuthor}" method="post" >
+            <input th:type="text" th:name="newAuthorName"  placeholder="Enter new author name">
+            <button type="submit">Save</button>
+        </form></p>
+    </div>
+    <div class="right-section" style="width: 45%;">
+        <p style="font-weight: bold; font-size: 25px;">New Subgenre:
+        <button type="submit" id="subgenreToggleButton" onclick="toggleForm('newSubgenre')">
+            <ion-icon name="chevron-down-outline"></ion-icon>
+        </button>
+        <form id="newSubgenre" style="display: none;" th:action="@{/host/actions/addSubgenre}" method="post">
+            <input th:type="text" th:name="newSubgenreName"  placeholder="Enter new genre name">
+            <button type="submit">Save</button>
+        </form></p>
+    </div>
+</div>
+
+</div>
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<script>
+    function toggleForm(formId) {
+        var form = document.getElementById(formId);
+        var button = document.getElementById(formId + "ToggleButton");
+
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>
+<script>
+    <!--этот скрипт позволяет искать в выпадающем списке по набираемым символам-->
+    $(function () {
+        $("#authorSelect").selectmenu();
+    });
+</script>
+</body>
+</html>
