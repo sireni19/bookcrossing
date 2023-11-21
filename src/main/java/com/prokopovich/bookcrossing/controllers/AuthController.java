@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @AllArgsConstructor
 public class AuthController {
+    //TODO check LOGIN logic
     private UserServiceImpl userService;
     @GetMapping("/index")
     public String home() {
@@ -61,6 +62,7 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
+        //TODO
         //activate logic
 //        emailService.sendSimpleMessage(user.getEmail(),"TEST 123", "TEST123");
         return "redirect:/register?success";
