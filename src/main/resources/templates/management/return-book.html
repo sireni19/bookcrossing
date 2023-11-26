@@ -14,16 +14,18 @@
 </head>
 <body>
 <div style="width: 80%; margin: 0 auto;">
+  <div class="container">
+    <div th:replace="~{management/host-navigation :: navigation('Главная')}"/>
+  </div>
   <div th:if="${param.fail}">
     <p>Error message: <span th:text="${param.fail}"></span></p>
   </div>
-  <div class="container">
-    <div th:replace="~{management/host-navigation :: navigation('Вернуть книгу')}"/>
+  <div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
+    <form th:action="@{/host/actions/find2}" method="get" style="text-align: center;">
+      <input th:type="email" th:name="useremail" placeholder="Введите email пользователя">
+      <button th:type="submit" class="btn btn-success">Найти пользователя</button>
+    </form>
   </div>
-  <form th:action="@{/host/actions/find2}" method="get">
-    <input th:type="email" th:name="useremail" placeholder="Введите email пользователя">
-    <button th:type="submit" class="btn btn-success">Найти пользователя</button>
-  </form>
   <div th:if="${userbook}!=null">
     <div>
       <h2 th:text="${userbook.title}"></h2>

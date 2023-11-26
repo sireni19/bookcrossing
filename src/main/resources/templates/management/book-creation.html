@@ -28,7 +28,7 @@
           enctype="multipart/form-data">
         <div class="col-md-6">
             <label class="form-label">Author:</label>
-            <select id="authorSelect" th:field="*{author}">
+            <select id="authorSelect"  th:name="author" th:field="*{author}">
                 <option value="">Select an author</option>
                 <option th:each="author : ${authors}" th:value="${author.getId()}" th:text="${author.getName()}"></option>
             </select>
