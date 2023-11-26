@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Возврат книг</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div style="width: 80%; margin: 0 auto;">
+    <div class="container">
+        <div th:replace="~{management/host-navigation :: navigation('Выдать книгу')}"/>
+    </div>
+    <div th:if="${param.fail}">
+        <div class="alert alert-info">Книга не найдена, проверьте введенные данные</div>
+    </div>
+    <div th:if="${param.fail2}">
+        <div class="alert alert-info">Такой пользователь не найден</div>
+    </div>
+    <div th:if="${message}">
+        <p th:text="${message}" class="success-message"></p>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Название книги</label>
+        <input type="text" class="form-control" id="titleInput" placeholder="Введите название книги">
+    </div>
+    <div class="mb-3">
+    <label class="form-label">ISBN/Номер</label>
+    <input type="text" id="isbnInput" placeholder="Введите ISBN или номер книги (13 цифр)" oninput="validateIsbn(this, event)">
+    <span id="isbnError" style="color: red;"></span>
+</div>
+<div class="col-12 d-flex justify-content-center">
+    <a id="searchLink" href="#">Найти</a>
+</div>
+<div th:if="${foundBook !=null}">
+
+    <div>
+        <div>
+            <img th:if="${base64Image != null}" th:src="'data:image/png;base64,' + ${base64Image}" alt="Изображение книги" style="max-width: 200px; max-height: 400px">
+            <img th:unless="${base64Image != null}" src="images/emp.png" alt="Дефолтное изображение">
+        </div>
+        <div>
+            <h2 th:text="${foundBook.title}"></h2>
+            <p th:text="'Жанр: ' + ${foundBook.getSubgenre().name}"></p>
+            <p th:text="'Автор: ' + ${foundBook.author.name}"></p>
+            <p th:text="'ISBN: ' + ${foundBook.isbn}"></p>
+            <p th:text="'Адрес: ' + ${foundBook.getLocation().address}"></p>
+            <div th:if="${foundBook.getUser()==null}">
+                <form th:action="@{/host/actions/setuser/{bookId}(bookId=${foundBook.getId()})}" method="post">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input th:type="text" th:name="toUser" placeholder="Введите имя пользователя">
+                    <button th:type="submit" class="btn btn-success">Выдать книгу</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    function validateIsbn(input, event) {
+        var isbnInputErr = document.getElementById("isbnError");
+        const value = input.value;
+        const regex = /^\d{13}$/;
+        if (!regex.test(value)) {
+            isbnInputErr.innerText = "ISBN должен состоять из 13 цифр";
+            event.preventDefault();
+            return false;
+        } else {
+            isbnInputErr.innerText = "";
+        }
+    }
+
+    document.getElementById("searchLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        var title = document.getElementById("titleInput").value;
+        var isbn = document.getElementById("isbnInput").value;
+        window.location.href = "/bcross/host/actions/find?title1=" + encodeURIComponent(title) + "&isbn1=" + encodeURIComponent(isbn);
+    });
+</script>
+
+</body>
+</html>

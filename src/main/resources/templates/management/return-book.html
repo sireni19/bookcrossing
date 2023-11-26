@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Возврат книг</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+          integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+          integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+<div style="width: 80%; margin: 0 auto;">
+  <div class="container">
+    <div th:replace="~{management/host-navigation :: navigation('Главная')}"/>
+  </div>
+  <div th:if="${param.fail}">
+    <p>Error message: <span th:text="${param.fail}"></span></p>
+  </div>
+  <div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
+    <form th:action="@{/host/actions/find2}" method="get" style="text-align: center;">
+      <input th:type="email" th:name="useremail" placeholder="Введите email пользователя">
+      <button th:type="submit" class="btn btn-success">Найти пользователя</button>
+    </form>
+  </div>
+  <div th:if="${userbook}!=null">
+    <div>
+      <h2 th:text="${userbook.title}"></h2>
+      <p th:text="'Жанр: ' + ${userbook.getSubgenre().name}"></p>
+      <p th:text="'Автор: ' + ${userbook.author.name}"></p>
+      <p th:text="'ISBN: ' + ${userbook.isbn}"></p>
+      <p th:text="'Предыдущий адрес: ' + ${userbook.getLocation().address}"></p>
+    </div>
+    <form th:action="@{/host/actions/deluser/{bookId}(bookId=${userbook.getId()})}" method="post">
+          <input type="hidden" name="_method" value="PUT">
+      <button th:type="submit" class="btn btn-success">Принять книгу</button>
+    </form>
+  </div>
+
+</div>
+</body>
+</html>

@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "locations")
 @NoArgsConstructor
 public class Location implements Serializable {
-    private static final long serialVersionUID = 5_555_5_0L;
+    private static final long serialVersionUID = 5_555_5_1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Location implements Serializable {
     @Size(min = 5,max=64)
     private String address;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "location_id")
     private List<Book> bookList;

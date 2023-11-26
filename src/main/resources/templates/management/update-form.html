@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+<a th:href="@{/main}" style="display: flex; justify-content: center; align-items: center; font-size: 24px;">На главную</a>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+  <div class="row">
+    <form class="col s12"  th:action="@{/host/actions/books}" th:method="post" th:object="${updBook}"  enctype="multipart/form-data">
+      <input type="hidden" name="_method" value="PUT">
+      <input type="hidden" name="id" th:value="${updBook.id}">
+      <div class="row">
+        <div class="input-field col s6">
+          <label>Автор</label>
+          <select id="authorSelect"  th:name="author" >
+            <option th:value="${updBook.author.getId()}" th:text="${updBook.author.getName()}"></option>
+            <option th:each="author : ${authors}" th:value="${author.getId()}" th:text="${author.getName()}"></option>
+          </select>
+        </div>
+        <div class="input-field col s6">
+          <label>Поджанр</label>
+          <select  th:name="subgenre">
+          <option th:value="${updBook.subgenre.getId()}" th:text="${updBook.subgenre.getName()}"></option>
+          <option th:each="author : ${authors}" th:value="${author.getId()}" th:text="${author.getName()}"></option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          Название: <input  th:type="text" th:field="*{title}" class="form-control"
+                 placeholder="Enter the title of the book">
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          ISBN: <input id="isbnInput" th:name="i_sbn" th:type="text" th:field="*{isbn}" class="form-control"
+                 placeholder="Enter 13 digit ISBN/Number">
+        </div>
+      </div>
+      <p>
+        <label style="font-weight: bold; font-size: 30px;">Image:</label>
+        <input type="file" th:name="img" accept="image/*,image/jpeg">
+      </p>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Обновить
+        <i class="material-icons right"></i>
+      </button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

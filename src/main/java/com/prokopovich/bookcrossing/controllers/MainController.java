@@ -5,12 +5,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-    @GetMapping()
+    @GetMapping("/main")
     public String main() {
         return "main";
     }
+
     @GetMapping("/books")
-    public String books(){
+    public String books() {
         return "books";
+    }
+
+    @GetMapping("/head")
+    public String header() {
+        return "fragments/header";
     }
 }
