@@ -48,7 +48,7 @@ public class HostController {
 
     @GetMapping("/main")
     public String showActionsPage(Model model, HttpSession httpSession,
-                                  @RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
+                                  @RequestParam(value = "page", defaultValue = "0") Integer page) {
         Location location = (Location) httpSession.getAttribute("hostLocation");
         try {
             Page<Book> pageBooks = bookService.findAllBooksInLocation(location, PageRequest.of(page, 3, Sort.Direction.DESC, "id"));

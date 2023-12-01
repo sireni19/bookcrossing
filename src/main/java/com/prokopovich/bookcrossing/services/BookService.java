@@ -4,6 +4,7 @@ import com.prokopovich.bookcrossing.entities.Book;
 import com.prokopovich.bookcrossing.entities.Location;
 import com.prokopovich.bookcrossing.exceptions.DuplicateBookException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
@@ -19,4 +20,9 @@ public interface BookService {
     Book findBookById(Integer id);
     void updateBook(Book book);
     void deleteBookById(Integer id);
+
+     Page<Book> getAllBooks(Pageable pageable);
+
+    Page<Book> getAllBookInCity(String city, Pageable pageable);
+
 }

@@ -39,8 +39,7 @@
             <img style="max-width: 150px; max-height: 300px" th:if="${bookImagesMap[book.id] != null }"
                  th:src="@{'data:image/png;base64,' + ${bookImagesMap[book.id]}}"
                  alt="Обложка книги">
-            <img th:unless="${bookImagesMap[book.id] != null}" src="images/emp.png" alt="Дефолтное изображение">
-            </div>
+            <img style="max-width: 150px; max-height: 300px" th:unless="${bookImagesMap[book.id] != null}" src="bcross/static/images/emp.png" alt="Дефолтное изображение">
         </td>
         <td class="table-info" th:text="${book.title}"></td>
         <td class="table-info" th:text="${book.isbn}"></td>

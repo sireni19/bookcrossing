@@ -1,9 +1,6 @@
 package com.prokopovich.bookcrossing.repositories;
 
-import com.prokopovich.bookcrossing.entities.Author;
-import com.prokopovich.bookcrossing.entities.Book;
-import com.prokopovich.bookcrossing.entities.Location;
-import com.prokopovich.bookcrossing.entities.User;
+import com.prokopovich.bookcrossing.entities.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -33,10 +30,17 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
     Optional<Page<Book>> findAllByLocationAndUserIsNull(Location location, Pageable pageable);
 
-   Book findBookById(Integer id);
+    Book findBookById(Integer id);
+
     @Modifying
     @Query("UPDATE Book b SET b.title = :title, b.author = :author, b.image = :image WHERE b.id = :id")
     void updateBook(@Param("id") int id, @Param("title") String title, @Param("author") Author author, @Param("image") byte[] image);
+
+    @Query("SELECT b FROM Book b JOIN b.location l WHERE l.city = :city")
+    Page<Book> findBooksByCity(@Param("city") City city,Pageable pageable);
+    Page<Book> findAll(Pageable pageable);
 }
+
+
 
 

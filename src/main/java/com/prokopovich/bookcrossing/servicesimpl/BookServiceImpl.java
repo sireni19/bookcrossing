@@ -1,20 +1,27 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
 import com.prokopovich.bookcrossing.entities.Book;
+import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
 
 import com.prokopovich.bookcrossing.entities.User;
 import com.prokopovich.bookcrossing.exceptions.DuplicateBookException;
 import com.prokopovich.bookcrossing.repositories.BookRepository;
+import com.prokopovich.bookcrossing.repositories.CityRepository;
 import com.prokopovich.bookcrossing.repositories.UserRepository;
 import com.prokopovich.bookcrossing.services.BookService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +29,7 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     private UserRepository userRepository;
+    private CityRepository cityRepository;
 
     @Override
     @Transactional
@@ -89,5 +97,20 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBookById(Integer id) {
         bookRepository.deleteById(id);
+    }
+
+    public Page<Book> getAllBooks(Pageable pageable) {
+          Page<Book> all= bookRepository.findAll(pageable);
+        return all;
+    }
+
+    @Override
+    public Page<Book> getAllBookInCity(String cityName, Pageable pageable) {
+        City city = cityRepository.findCityByName(cityName);
+        Page<Book>books = bookRepository.findBooksByCity(city,pageable);
+        if (city != null) {
+            return books;
+        }
+        return Page.empty();
     }
 }

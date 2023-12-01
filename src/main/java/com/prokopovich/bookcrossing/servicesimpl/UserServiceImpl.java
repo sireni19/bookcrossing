@@ -12,6 +12,8 @@ import com.prokopovich.bookcrossing.repositories.UserRepository;
 import com.prokopovich.bookcrossing.services.UserService;
 import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,43 +76,40 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void setHostLocation(Integer locId, String username) throws HostException {
-       Optional<User> optionalHost=userRepository.findUserByUsername(username);
-       if(optionalHost.isEmpty()){
-           throw new HostException("No such user");
-       }
-        else if(optionalHost.isPresent()&&optionalHost.get().getRole()!=Role.HOST_ROLE){
+        Optional<User> optionalHost = userRepository.findUserByUsername(username);
+        if (optionalHost.isEmpty()) {
+            throw new HostException("No such user");
+        } else if (optionalHost.isPresent() && optionalHost.get().getRole() != Role.HOST_ROLE) {
             throw new HostException("Such user isn`t HOST");
-        }
-        else if (optionalHost.isPresent()&&optionalHost.get().getRole()==Role.HOST_ROLE&&optionalHost.get().getLocation()!=null) {
+        } else if (optionalHost.isPresent() && optionalHost.get().getRole() == Role.HOST_ROLE && optionalHost.get().getLocation() != null) {
             throw new HostException("Such user has location already");
+        } else {
+            userRepository.setHostLocation(locationRepository.findById(locId).get(), username);
         }
-        else {
-           userRepository.setHostLocation(locationRepository.findById(locId).get(),username);
-       }
 
     }
 
     @Override
     public UserDtoToShow getUserDtoToShow(String username) throws NoResultException {
         User user = findUserByUsername(username.trim());
-        if (user.getRole() == Role.HOST_ROLE&&user.getLocation()!=null) {
+        if (user.getRole() == Role.HOST_ROLE && user.getLocation() != null) {
             System.out.println();
             user.setLocation(locationRepository.findById(user.getLocation().getId()).get());
             return convertFromUserToUserDtoShow(user);
-        }else {
-            return  convertFromUserToUserDtoShow(user);
+        } else {
+            return convertFromUserToUserDtoShow(user);
         }
     }
 
     @Override
     public List<UserDtoToShow> findHostsByLocationId(Integer locationId) {
         Optional<List<User>> optional = userRepository.findUsersByLocationId(locationId);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             List<User> hosts = optional.get();
-            List<UserDtoToShow> hostsdto=hosts.stream().filter(user -> user.getRole()==Role.HOST_ROLE)
+            List<UserDtoToShow> hostsdto = hosts.stream().filter(user -> user.getRole() == Role.HOST_ROLE)
                     .map(user -> convertFromUserToUserDtoShow(user)).collect(Collectors.toList());
             return hostsdto;
-        }else {
+        } else {
             return (List<UserDtoToShow>) UserNotFound.getInstance();
         }
     }
@@ -129,22 +128,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
-        Optional<User> optional=userRepository.findUserByEmail(email);
-            if(optional.isPresent()){
-                return optional.get();
-            }else {
-                return  UserNotFound.getInstance();
-            }
+        Optional<User> optional = userRepository.findUserByEmail(email);
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            return UserNotFound.getInstance();
+        }
     }
+
 
     @Override
     public void saveUser(UserDetailsImplDto dto) {
         User user = new User();
-        user.setUsername(dto.getUsername().trim());
-        user.setEmail(dto.getEmail().trim());
+        user.setUsername(dto.getEmail().trim());
+        user.setEmail(dto.getUsername().trim());
 
         //encrypt the password once we integrate spring security
-        user.setPassword(passwordEncoder.encode(dto.getPassword().trim()));
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         userRepository.save(user);
     }
 }
+
