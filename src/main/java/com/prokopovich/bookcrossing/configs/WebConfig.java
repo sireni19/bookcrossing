@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.configs;
 
+import com.prokopovich.bookcrossing.geo.Geocoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -12,6 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+    @Bean
+    public Geocoder geocoder() {
+        return new Geocoder();
+    }
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();

@@ -15,15 +15,20 @@ import java.util.List;
 @Table(name = "locations")
 @NoArgsConstructor
 public class Location implements Serializable {
-    private static final long serialVersionUID = 5_555_5_1L;
+    private static final long serialVersionUID = 5_555_5_2L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     @Column(nullable = false)
     @NotBlank
     @Size(min = 5,max=64)
     private String address;
+
+    @Column(nullable = true)
+    private String coordinates;
+    private String description;
 
     @OneToMany(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.SET_NULL)

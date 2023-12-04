@@ -13,15 +13,9 @@ import com.prokopovich.bookcrossing.services.BookService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -80,6 +74,7 @@ public class BookServiceImpl implements BookService {
         Page<Book> page =optional.orElseThrow(()->new EntityNotFoundException("No books in your location, add new books"));
         return page;
     }
+
 
     @Override
     public Book findBookById(Integer id) throws  EntityNotFoundException{

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{fragments/libraries :: head}">
+    </head>
+    <title>Места</title>
+    <link rel="stylesheet" type="text/css" href="bcross/static/css/overflow.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d8e228fd-f63a-4791-b07d-d8a043035416&lang=ru_RU"></script>
+</head>
+<body>
+<script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
+<form th:action="@{/cities}" th:method="get" style="display: flex; justify-content: center; align-items: center">
+    <select id="citySelect" name="city">
+        <option value="all">Выберите свой город</option>
+        <option th:each="city : ${cities}" th:value="${city.getName()}" th:text="${city.getName()}"
+                th:selected="${city.getName() == selectedCity}"></option>
+    </select>
+    <button type="submit">Поиск</button>
+</form>
+
+<p>Безопасная полка — это место обмена книгами, в котором есть полочка для книг буккроссинга, например кафе, библиотека
+    или магазин.
+    Такие места защищены от непогоды и находятся в людных местах. Вы можете выбрать свой город, чтобы увидеть список
+    мест, которые предоставляют
+    услуги буккроссинга</p>
+<div th:if="${locations != null}" >
+    <div id="app" style="width: 300px; height: 400px;"></div>
+    <script th:inline="javascript">
+        var addressesCoordinatesJson = /*[[${addressesCoordinatesJson}]]*/ '{}';
+        window.addressesCoordinatesJson = addressesCoordinatesJson;
+        console.log('addressesCoordinatesJson:', addressesCoordinatesJson);
+        console.log('window.addressesCoordinatesJson:', window.addressesCoordinatesJson);
+    </script>
+
+
+    <div class="layer">
+        <ul>
+            <li th:each="l : ${locations}">
+                <form th:action="@{/shelves}">
+                    <input type="hidden" th:value="${l.getId()}" th:name="id">
+                    <button type="submit"><span th:text="${l.getName()+' '+l.getAddress()}"></span></button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div th:include="fragments/footer :: footer"></div>
+<script src="bcross/static/js/mapseveralpoints.js" type="text/javascript"></script>
+</body>
+</html>

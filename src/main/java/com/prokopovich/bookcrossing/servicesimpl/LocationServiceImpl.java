@@ -1,22 +1,28 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
+import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
 import com.prokopovich.bookcrossing.exceptions.DuplicateLocationException;
+import com.prokopovich.bookcrossing.repositories.CityRepository;
 import com.prokopovich.bookcrossing.repositories.LocationRepository;
 import com.prokopovich.bookcrossing.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
+    private CityRepository cityRepository;
 
 
     @Autowired
-    public LocationServiceImpl(LocationRepository locationRepository) {
+    public LocationServiceImpl(LocationRepository locationRepository, CityRepository cityRepository) {
         this.locationRepository = locationRepository;
+        this.cityRepository = cityRepository;
     }
 
     @Override
@@ -46,4 +52,19 @@ public class LocationServiceImpl implements LocationService {
         locationRepository.updateLocation(loc.getId(), loc.getAddress());
     }
 
+    @Override
+    public List<Location> findLocationsByCity(String cityName) {
+        City city = cityRepository.findCityByName(cityName);
+        return  locationRepository.findLocationsByCity(city);
+    }
+
+    @Override
+    public List<Location> findAllLocations() {
+        return (List<Location>) locationRepository.findAll();
+    }
+
+    @Override
+    public Location getLocationById(Integer id) {
+        return locationRepository.findById(id).get();
+    }
 }

@@ -1,0 +1,36 @@
+
+.layer {
+    /*overflow: auto;*/
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 300px;
+    weight: 200px;
+    padding: 5px;
+    background-color: #f5f5f5; /* Цвет фона блока */
+    border: 1px solid #ccc; /* Граница блока */
+    border-radius: 4px; /* Скругление углов блока */
+}
+
+.layer ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    margin: 0;
+    padding: 0;
+}
+
+.layer li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd; /* Горизонтальная линия между элементами списка */
+}
+
+.layer li:last-child {
+    border-bottom: none; /* Убираем границу у последнего элемента списка */
+}
+
+.layer a {
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+    color: #333; /* Цвет ссылок */
+}
+
+.layer a:hover {
+    background-color: #f0f0f0; /* Изменение цвета фона ссылки при наведении */
+}

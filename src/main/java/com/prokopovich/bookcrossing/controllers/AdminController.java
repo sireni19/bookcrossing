@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prokopovich.bookcrossing.dto.UserDtoToShow;
 import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
@@ -8,6 +9,7 @@ import com.prokopovich.bookcrossing.exceptions.AdminException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateCityException;
 import com.prokopovich.bookcrossing.exceptions.DuplicateLocationException;
 import com.prokopovich.bookcrossing.exceptions.HostException;
+import com.prokopovich.bookcrossing.geo.Geocoder;
 import com.prokopovich.bookcrossing.services.CityService;
 import com.prokopovich.bookcrossing.services.LocationService;
 import com.prokopovich.bookcrossing.services.UserService;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +33,14 @@ public class AdminController {
     private CityService cityService;
     private LocationService locationService;
     private UserService userService;
+    private Geocoder geocoder;
 
     @Autowired
-    public AdminController(CityService cityService, LocationService locationService, UserService userService) {
+    public AdminController(CityService cityService, LocationService locationService, UserService userService, Geocoder geocoder) {
         this.cityService = cityService;
         this.locationService = locationService;
         this.userService = userService;
+        this.geocoder = geocoder;
     }
 
     @GetMapping("")
@@ -90,17 +95,29 @@ public class AdminController {
     }
 
     @PostMapping("/locations")
-    public String addLocation(@RequestParam(name = "newAddress") String newAddress, @RequestParam(name = "cityName") String cityName, Model model) {
+    public String addLocation(@RequestParam(name = "newAddress") String newAddress,@RequestParam(name = "name") String name,
+                              @RequestParam(name = "cityName") String cityName,
+                              @RequestParam(name = "description",required = false)String description,Model model) {
         Location location = new Location(newAddress);
         City city = cityService.findCityByName(cityName);
+        String fullAddress =cityName+", "+newAddress;
         if (city != null) {
             location.setCity(city);
-            try {
-                locationService.saveLocation(location);
-            } catch (DuplicateLocationException e) {
-                model.addAttribute("errorMessage", e.getMessage());
-                return "settings/error";
-            }
+        }
+        try {
+            location.setName(name);
+            String response = geocoder.GeocodeSync(fullAddress);
+            String coordinates = geocoder.extractCoordinates(response);
+            location.setCoordinates(coordinates);
+            location.setDescription(description);
+            locationService.saveLocation(location);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (DuplicateLocationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "settings/error";
         }
         return "redirect:/admin/actions/locations";
     }
@@ -118,7 +135,8 @@ public class AdminController {
     @PostMapping("/locations/update")
     public String updateLocation(@ModelAttribute(value = "updloc")Location location, @RequestParam(value = "updcity",required = false)String cName,
                                  @RequestParam(name = "locId",required = false)Integer locId,@RequestParam(name = "hostId",required = false)Integer hostId,
-                                 @RequestParam(name = "query",required = false)String username,Model model) {
+                                 @RequestParam(name = "query",required = false)String username,
+                                 Model model) throws JsonProcessingException {
         if(hostId !=null&&locId==null){
             userService.deleteHostLocation(hostId);
         }
@@ -130,6 +148,9 @@ public class AdminController {
                 return "settings/error";
             }
         }
+        String street=location.getAddress();
+        String coordinates=geocoder.extractCoordinates(street);
+        location.setCoordinates(coordinates);
         City city = cityService.findCityByName(cName);
         location.setCity(city);
         locationService.updateLocation(location);

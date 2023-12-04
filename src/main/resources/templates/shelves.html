@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <head th:replace="~{fragments/libraries :: head}"></head>
+    <title>Безопасная полка</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d8e228fd-f63a-4791-b07d-d8a043035416&lang=ru_RU"></script>
+    <link href="bcross/static/css/map.css" rel="stylesheet">
+    <link href="bcross/static/css/description.css" rel="stylesheet">
+    <link href="bcross/static/css/overflow_x.css" rel="stylesheet">
+
+</head>
+<body>
+<script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
+
+<h3 th:text="${loc.getName()}"></h3>
+<script src="bcross/static/js/maponepoint.js" type="text/javascript" th:attr="xy=${coordinates}, address=${address}"></script>
+<div id="app" style="width: 600px; height: 300px;"></div>
+<p th:text="${loc.getAddress()}"></p>
+<div class="descriptions">
+<h4 th:text="Описание"></h4>
+    <p th:text="${loc.description}"></p>
+    <h4>Книги на полке </h4>
+<div class="layer">
+    <ul style="display: flex; flex-wrap: nowrap;">
+        <li th:each="b : ${books}" style="flex: 0 0 auto; margin-right: 200px;">
+            <form th:action="@{#}">
+                <input type="hidden" th:value="${b.getId()}" th:name="id">
+                <img style="width: 100px; height: 150px" th:if="${pictures[b.getId()] != null }"
+                     th:src="@{'data:image/png;base64,' + ${pictures[b.getId()]}}"
+                     alt="Обложка книги">
+                <img style="width: 100px; height: 150px" th:unless="${pictures[b.getId()] != null}" src="bcross/static/images/emp.png" alt="Дефолтное изображение"><br>
+                <span th:text="${b.getTitle()}" style="font-size: 30px;"></span><br>
+                <span th:text="${b.getAuthor().getName()}" style="font-size: 20px;"></span><br>
+                <span th:text="${b.getIsbn()}" style="font-size: 15px;"></span><br>
+
+            </form>
+        </li>
+    </ul>
+</div>
+</div>
+</body>
+</html>

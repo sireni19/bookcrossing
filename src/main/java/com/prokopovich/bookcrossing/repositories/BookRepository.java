@@ -30,6 +30,7 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
     Optional<Page<Book>> findAllByLocationAndUserIsNull(Location location, Pageable pageable);
 
+
     Book findBookById(Integer id);
 
     @Modifying
