@@ -1,12 +1,11 @@
 package com.prokopovich.bookcrossing.controllers;
 
 import com.prokopovich.bookcrossing.entities.Book;
-import com.prokopovich.bookcrossing.entities.Location;
-import com.prokopovich.bookcrossing.repositories.CityRepository;
+import com.prokopovich.bookcrossing.entities.News;
 import com.prokopovich.bookcrossing.services.BookService;
 import com.prokopovich.bookcrossing.services.CityService;
+import com.prokopovich.bookcrossing.services.NewsService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -28,9 +27,12 @@ import java.util.stream.IntStream;
 public class MainController {
     private final CityService cityService;
     private final BookService bookService;
+    private final NewsService newsService;
 
     @GetMapping("/main")
-    public String main() {
+    public String main(Model model) {
+        List<News> news = newsService.getAllNews();
+        model.addAttribute("news",news);
         return "main";
     }
 
