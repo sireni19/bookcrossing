@@ -5,14 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prokopovich.bookcrossing.entities.Book;
 import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
-import com.prokopovich.bookcrossing.services.BookService;
+import com.prokopovich.bookcrossing.services.CityService;
+import com.prokopovich.bookcrossing.services.LocationService;
 import com.prokopovich.bookcrossing.utils.BookUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.Banner;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -22,15 +23,15 @@ import java.util.stream.Collectors;
 @Controller
 @AllArgsConstructor
 public class СityLocationController {
-    private CityControllerRest cityControllerRest;
-    private LocationControllerRest locationControllerRest;
+    private CityService cityService;
+    private LocationService locationService;
 
     @GetMapping("/cities")
     public String handleCityRequest(@RequestParam(value = "city", required = false, defaultValue = "all") String cityName, Model model) {
-        List<City> cities = cityControllerRest.getAllCities();
+        List<City> cities = cityService.findAllCities();
         model.addAttribute("cities", cities);
         if (cityName != null && !cityName.equals("all")) {
-            List<Location> locations = locationControllerRest.getLocationsInCity(cityName);
+            List<Location> locations = locationService.findLocationsByCity(cityName);
             Map<String, String> addressesCoordinates = locations.stream().collect(Collectors.toMap(Location::getAddress, loc -> loc.getCoordinates()));
 
             // Преобразование объекта addressesCoordinates в JSON-строку
@@ -52,7 +53,7 @@ public class СityLocationController {
 
     @GetMapping("/shelves")
     public String showShelve(@RequestParam(name = "id") Integer id, Model model) {
-        Location location = locationControllerRest.getLocationsById(id);
+        Location location = locationService.getLocationById(id);
         List<Book> list = location.getBookList();
         list.removeIf(book -> book.getUser() != null);
         Map<Integer, String> pictures = BookUtils.getBookPictures(list);
