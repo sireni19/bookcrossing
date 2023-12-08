@@ -4,11 +4,37 @@
     <meta charset="UTF-8">
     <title>Буккроссинг</title>
     <head th:replace="~{fragments/libraries :: head}">
+    </head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".accordion").click(function () {
+                $(this).toggleClass("active");
+                $(this).next(".panel").slideToggle(200);
+            });
+        });
+    </script>
 </head>
+<link rel="stylesheet" href="bcross/static/css/news.css">
+<link rel="stylesheet" href="bcross/static/css/news-accordion.css">
 <body>
 <script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
-
-
-<div th:include="fragments/footer :: footer"></div>
+<div class="news-list">
+    <h1>Новости литературы</h1>
+    <ul class="news-list" th:each="n:${news}">
+        <li class="accordion">
+            <span style="font-weight: bold; font-size: 24px;font-style: initial" th:text="${n.title}"></span><br>
+            <span th:text="${n.date}"></span>
+        </li>
+        <div class="panel">
+            <div class="image-container" th:if="${n.getPictureLink() != null}">
+                <img th:src="${n.getPictureLink()}" alt="Изображение новости">
+            </div>
+            <br>
+            <span th:text="${n.content}"></span>
+        </div>
+    </ul>
+</div>
+<div style="flex-shrink: 0;" th:include="fragments/footer :: footer"></div>
 </body>
 </html>
