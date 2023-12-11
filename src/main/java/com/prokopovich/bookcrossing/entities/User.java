@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
-    private static final long serialVersionUID = 6_666_6_1L;
+    private static final long serialVersionUID = 6_666_6_2L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,9 +22,6 @@ public class User implements Serializable {
     private String password;
     private byte[] photo;
     private Role role = Role.USER_ROLE; //by default will be USER_ROLE
-    @Column(name = "is_activate",nullable = true)
-    private boolean isActivate =false;
-
     @OneToOne(mappedBy = "user")
     private Book book;
 

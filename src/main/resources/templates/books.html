@@ -5,42 +5,59 @@
     <title>Книги</title>
     <head th:replace="~{fragments/libraries :: head}">
     </head>
+    <link rel="stylesheet" type="text/css" href="bcross/static/css/footer.css">
+    <link rel="stylesheet" type="text/css" href="bcross/static/css/book-card.css">
 </head>
 
 <body>
 <script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
-<form th:action="@{/books}" th:method="get">
+<br>
+<form th:action="@{/books}" th:method="get" style="display: flex; justify-content: center;">
     <select id="citySelect" name="city">
         <option value="all">Все города</option>
         <option th:each="city : ${cities}" th:value="${city.getName()}" th:text="${city.getName()}"
                 th:selected="${city.getName() == selectedCity}"></option>
     </select>
     <button type="submit">Поиск</button>
+</form><br>
+<form th:action="@{/books}" th:method="get">
+    <input type="search" class="form-control ds-input" id="search-input" th:name="query" placeholder="Search..."
+           aria-label="Search for..." autocomplete="off" data-docs-version="4.3" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0"
+           dir="auto" style="position: relative; vertical-align: top;">
+    <input type="hidden" name="city" th:value="${selectedCity}">
 </form>
 <div class="container">
-    <div class="row row-cols-2">
+    <div class="row row-cols-3">
         <!-- Цикл для каждой книги -->
         <div class="col" th:each="book : ${booksOnPage.content}">
-            <img style="max-width: 150px; max-height: 300px" th:if="${bookImagesMap[book.id] != null }"
-                 th:src="@{'data:image/png;base64,' + ${bookImagesMap[book.id]}}"
-                 alt="Обложка книги">
-            <img style="max-width: 150px; max-height: 300px" th:unless="${bookImagesMap[book.id] != null}" src="bcross/static/images/emp.png" alt="Дефолтное изображение">
-            <p> <span th:text="${book.title}"></span></p>
-            <p> <span th:text="${book.author.name}"></span></p>
-            <p> <span th:text="${book.isbn}"></span></p>
-            <p> <span th:text="${book.subgenre.name}"></span></p>
-            <p> <span th:text="${book.location.address}"></span></p>
+            <div class="book-card">
+                <img th:if="${bookImagesMap[book.id] != null }"
+                     th:src="@{'data:image/png;base64,' + ${bookImagesMap[book.id]}}"
+                     alt="Обложка книги">
+                <img style="max-width: 150px; max-height: 200px" th:unless="${bookImagesMap[book.id] != null}"
+                     src="bcross/static/images/emp.png" alt="Дефолтное изображение">
+                <p style="font-size: 30px; font-weight: bold;"><span th:text="${book.title}"></span></p>
+                <p><span th:text="${book.author}"></span></p>
+                <p><span th:text="${book.isbn}"></span></p>
+                <p><span th:text="${book.subgenre}"></span></p>
+                <p><span th:text="${book.location}"></span></p>
+            </div>
         </div>
     </div>
 </div>
 <nav aria-label="...">
     <ul class="pagination pagination-lg" style="display: flex; justify-content: center;">
-        <li class="page-item" th:classappend="${pageNumber == booksOnPage.number ? 'active' : ''}" th:each="pageNumber : ${numbers}">
-            <a class="page-link"  th:href="@{/books(page=${pageNumber}, city=${selectedCity})}" th:text="${pageNumber+1}"></a>
+        <li class="page-item" th:classappend="${pageNumber == booksOnPage.number ? 'active' : ''}"
+            th:each="pageNumber : ${numbers}">
+            <a class="page-link" th:href="@{/books(page=${pageNumber}, city=${selectedCity})}"
+               th:text="${pageNumber+1}"></a>
         </li>
     </ul>
 </nav>
-<div th:include="fragments/footer :: footer"></div>
+<footer class="footer">
+    <div th:include="fragments/footer :: footer"></div>
+</footer>
 </body>
 
 

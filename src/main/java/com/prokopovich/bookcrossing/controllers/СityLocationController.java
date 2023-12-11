@@ -60,7 +60,7 @@ public class СityLocationController {
         model.addAttribute("loc", location);
         model.addAttribute("coordinates", location.getCoordinates());
         model.addAttribute("address", location.getAddress());
-        model.addAttribute("books", location.getBookList());
+        model.addAttribute("booksDto", BookUtils.listBooksToDtoList(list));
         model.addAttribute("pictures", pictures);
         return "shelves";
     }

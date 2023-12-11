@@ -47,10 +47,6 @@ public class AdminController {
     public String showActionsPage() {
         return "settings/full-functional";
     }
-    @GetMapping("/q")//test end-point
-    public String showActionsPageq() {
-        return "q";
-    }
 
     @GetMapping("/cities")
     public String showCities(Model model) {

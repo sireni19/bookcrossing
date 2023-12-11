@@ -120,7 +120,6 @@ public class UserServiceImpl implements UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole(),
-                user.isActivate(),
                 user.getLocation()
         );
         return dto;

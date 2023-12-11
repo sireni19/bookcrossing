@@ -23,7 +23,7 @@
     <h4>Книги на полке </h4>
 <div class="layer">
     <ul style="display: flex; flex-wrap: nowrap;">
-        <li th:each="b : ${books}" style="flex: 0 0 auto; margin-right: 200px;">
+        <li th:each="b : ${booksDto}" style="flex: 0 0 auto; margin-right: 200px;">
             <form th:action="@{#}">
                 <input type="hidden" th:value="${b.getId()}" th:name="id">
                 <img style="width: 100px; height: 150px" th:if="${pictures[b.getId()] != null }"
@@ -31,7 +31,7 @@
                      alt="Обложка книги">
                 <img style="width: 100px; height: 150px" th:unless="${pictures[b.getId()] != null}" src="bcross/static/images/emp.png" alt="Дефолтное изображение"><br>
                 <span th:text="${b.getTitle()}" style="font-size: 30px;"></span><br>
-                <span th:text="${b.getAuthor().getName()}" style="font-size: 20px;"></span><br>
+                <span th:text="${b.getAuthor()}" style="font-size: 20px;"></span><br>
                 <span th:text="${b.getIsbn()}" style="font-size: 15px;"></span><br>
 
             </form>
@@ -39,5 +39,6 @@
     </ul>
 </div>
 </div>
+<footer class="footer"><div th:include="fragments/footer :: footer"></div></footer>
 </body>
 </html>

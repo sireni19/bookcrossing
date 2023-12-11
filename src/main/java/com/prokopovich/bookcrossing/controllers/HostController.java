@@ -36,7 +36,7 @@ public class HostController {
     private UserService userService;
     private BookService bookService;
 
-    /*если какой-то из методов понадобится Location,
+    /*если какому-то из методов понадобится Location,
     то сработает метод createLocation, поместится в сессию и из сессии его можно будет забирать*/
     @ModelAttribute("hostLocation")
     public Location createHostLocation(Authentication authentication) {

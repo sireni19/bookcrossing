@@ -12,7 +12,6 @@ public class UserDtoToShow {
     private String username;
     private String email;
     private Role role;
-    private boolean isActive;
     private Location location;
     //TODO need to add the relation with Book for HOSTs
 }

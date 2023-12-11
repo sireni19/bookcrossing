@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
+import com.prokopovich.bookcrossing.dto.BookDto;
 import com.prokopovich.bookcrossing.entities.Book;
 import com.prokopovich.bookcrossing.entities.City;
 import com.prokopovich.bookcrossing.entities.Location;
@@ -10,12 +11,14 @@ import com.prokopovich.bookcrossing.repositories.BookRepository;
 import com.prokopovich.bookcrossing.repositories.CityRepository;
 import com.prokopovich.bookcrossing.repositories.UserRepository;
 import com.prokopovich.bookcrossing.services.BookService;
+import com.prokopovich.bookcrossing.utils.BookUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -54,39 +57,39 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findBookByUserEmail(String email) throws EntityNotFoundException{
+    public Book findBookByUserEmail(String email) throws EntityNotFoundException {
         Optional<User> optional = userRepository.findUserByEmail(email);
         User user = optional.orElseThrow(() -> new EntityNotFoundException("User not found with username:: " + email));
-        Optional<Book> optional2=bookRepository.findBookByUser(user);
-        Book book =optional2.orElseThrow(()->new EntityNotFoundException("User has not book"));
+        Optional<Book> optional2 = bookRepository.findBookByUser(user);
+        Book book = optional2.orElseThrow(() -> new EntityNotFoundException("User has not book"));
         return book;
     }
 
     @Override
     @Transactional
     public void clearUserSetNewLocationToBook(Location newLocation, Integer bookId) {
-        bookRepository.removeUserAndSetLocation(newLocation,bookId);
+        bookRepository.removeUserAndSetLocation(newLocation, bookId);
     }
 
     @Override
     public Page<Book> findAllBooksInLocation(Location location, Pageable pageable) {
-        Optional<Page<Book>> optional =bookRepository.findAllByLocationAndUserIsNull(location,pageable);
-        Page<Book> page =optional.orElseThrow(()->new EntityNotFoundException("No books in your location, add new books"));
+        Optional<Page<Book>> optional = bookRepository.findAllByLocationAndUserIsNull(location, pageable);
+        Page<Book> page = optional.orElseThrow(() -> new EntityNotFoundException("No books in your location, add new books"));
         return page;
     }
 
 
     @Override
-    public Book findBookById(Integer id) throws  EntityNotFoundException{
+    public Book findBookById(Integer id) throws EntityNotFoundException {
         Optional<Book> optional = bookRepository.findById(id);
-        Book book = optional.orElseThrow(()->new EntityNotFoundException("Incorrect book id"));
+        Book book = optional.orElseThrow(() -> new EntityNotFoundException("Incorrect book id"));
         return book;
     }
 
     @Override
     @Transactional
     public void updateBook(Book book) {
-        bookRepository.updateBook(book.getId(),book.getTitle(),book.getAuthor(),book.getImage());
+        bookRepository.updateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getImage());
     }
 
     @Override
@@ -94,18 +97,24 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    public Page<Book> getAllBooks(Pageable pageable) {
-          Page<Book> all= bookRepository.findAll(pageable);
-        return all;
+    public Page<BookDto> getAllBooks(Pageable pageable) {
+        Page<Book> all = bookRepository.findAll(pageable);
+        return BookUtils.pageBooksToDtoPage(all);
     }
 
     @Override
-    public Page<Book> getAllBookInCity(String cityName, Pageable pageable) {
+    public Page<BookDto> getAllBookInCity(String cityName, Pageable pageable) {
         City city = cityRepository.findCityByName(cityName);
-        Page<Book>books = bookRepository.findBooksByCity(city,pageable);
+        Page<Book> books = bookRepository.findBooksByCity(city, pageable);
         if (city != null) {
-            return books;
+            return BookUtils.pageBooksToDtoPage(books);
         }
         return Page.empty();
+    }
+
+    @Override
+    public Page<BookDto> getAllBooksWithTitleLike(String name, Pageable pageable) {
+        Page<Book> books = bookRepository.findBooksByTitle(name, pageable);
+        return BookUtils.pageBooksToDtoPage(books);
     }
 }

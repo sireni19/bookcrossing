@@ -9,11 +9,12 @@ var headerText =
     '<li><a href="/bcross/main">Главная</a></li>' +
     '<li><a href="/bcross/cities">Места</a></li>' +
     '<li><a href="/bcross/books">Книги</a></li>' +
-    '<li><a href="#">Новости</a></li>' +
-    '<li><a href="#">Войти</a></li>' +
-    '<li><a href="#">Регистрация</a></li>' +
+    '<li><a href="/bcross/login">Войти</a></li>' +
+    '<li><a href="/bcross/register">Регистрация</a></li>' +
+    '<li><a href="/bcross/logout ">Выйти</a></li>' +
     '</ul>' +
     '<a href="#" class="callback">Обратная связь</a>' +
+
     '</div>' +
     '</div>' +
     '</div>' +

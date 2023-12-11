@@ -1,5 +1,6 @@
 package com.prokopovich.bookcrossing.services;
 
+import com.prokopovich.bookcrossing.dto.BookDto;
 import com.prokopovich.bookcrossing.entities.Book;
 import com.prokopovich.bookcrossing.entities.Location;
 import com.prokopovich.bookcrossing.exceptions.DuplicateBookException;
@@ -21,8 +22,9 @@ public interface BookService {
     void updateBook(Book book);
     void deleteBookById(Integer id);
 
-     Page<Book> getAllBooks(Pageable pageable);
+     Page<BookDto> getAllBooks(Pageable pageable);
 
-    Page<Book> getAllBookInCity(String city, Pageable pageable);
+    Page<BookDto> getAllBookInCity(String city, Pageable pageable);
+    Page<BookDto> getAllBooksWithTitleLike(String name,Pageable pageable);
 
 }

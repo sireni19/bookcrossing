@@ -1,5 +1,7 @@
 package com.prokopovich.bookcrossing.dto;
 
+import com.prokopovich.bookcrossing.customannotations.CustomUniqueEmail;
+import com.prokopovich.bookcrossing.customannotations.CustomUniqueUsername;
 import com.prokopovich.bookcrossing.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,16 +32,19 @@ public class UserDetailsImplDto implements UserDetails {
     }
 
     private Integer id;
-    @NotEmpty
-    @NotBlank
+    @NotEmpty(message = "Поле не должно быть пустым")
+    @NotBlank(message = "Поле не валидно")
+    @CustomUniqueUsername
     private String username;
-    @NotEmpty(message = "Email should not be empty")
-    @Email
 
+    @NotEmpty(message = "Email не должен быть пустым")
+    @Email(message = "Email не валиден")
+    @CustomUniqueEmail
     private String email;
-    @NotEmpty(message = "Password should not be empty")
-    @NotBlank
-    @Size(min = 1)
+
+    @NotEmpty(message = "Пароль не должен быть пустым")
+    @NotBlank(message = "Пароль не валиден")
+    @Size(min = 2,message = "Пароль должен состоять минимум из двух символов")
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;

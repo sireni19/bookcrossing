@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/index").permitAll()
                         .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                         .anyRequest().authenticated()))
-                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/books").permitAll())
+                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/main").permitAll())
                 .logout((logout) -> logout.invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

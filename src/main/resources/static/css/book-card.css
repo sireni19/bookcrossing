@@ -1,0 +1,30 @@
+.row-cols-2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.col {
+    flex-basis: 300px; /* Расчет ширины колонки (50% минус отступы) */
+    margin-bottom: 20px;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.book-card img {
+    width: 150px;
+    height: 200px;
+}
+
+.book-card p {
+    margin: 5px 0;
+}

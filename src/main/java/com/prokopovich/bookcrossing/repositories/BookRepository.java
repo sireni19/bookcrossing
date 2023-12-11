@@ -29,16 +29,15 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
     Optional<Book> findBookByUser(User user);
 
     Optional<Page<Book>> findAllByLocationAndUserIsNull(Location location, Pageable pageable);
-
-
-    Book findBookById(Integer id);
-
     @Modifying
     @Query("UPDATE Book b SET b.title = :title, b.author = :author, b.image = :image WHERE b.id = :id")
     void updateBook(@Param("id") int id, @Param("title") String title, @Param("author") Author author, @Param("image") byte[] image);
 
     @Query("SELECT b FROM Book b JOIN b.location l WHERE l.city = :city")
     Page<Book> findBooksByCity(@Param("city") City city,Pageable pageable);
+
+    @Query("SELECT b FROM Book b WHERE lower(b.title) ILIKE lower(concat('%', ?1, '%'))")
+    Page<Book> findBooksByTitle(String searchTerm, Pageable pageable);
     Page<Book> findAll(Pageable pageable);
 }
 
