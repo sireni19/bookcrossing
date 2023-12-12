@@ -14,11 +14,40 @@
             });
         });
     </script>
+    <link rel="stylesheet" href="bcross/static/css/news.css">
+    <link rel="stylesheet" href="bcross/static/css/news-accordion.css">
+    <link rel="stylesheet" href="bcross/static/css/footer.css">
+    <link rel="stylesheet" href="bcross/static/css/custom-button.css">
 </head>
-<link rel="stylesheet" href="bcross/static/css/news.css">
-<link rel="stylesheet" href="bcross/static/css/news-accordion.css">
-<link rel="stylesheet" href="bcross/static/css/footer.css">
+
 <body>
+<br>
+<button id="openButton" class="custom-button" onclick="openPopup()">О проекте</button>
+<div id="popup" class="popup" style="display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffe2ca;
+        padding: 20px;
+        border: 1px solid black;
+        z-index: 9999;">
+    <!-- Содержимое всплывающего окна -->
+    <h3 style="font-size: 24px;font-weight: bold; color: #333333; margin-bottom: 10px;">Дополнительная информация</h3>
+    <p style=" font-size: 16px; line-height: 1.5;color: #000000;">Текст дополнительной информации...</p>
+    <button onclick="closePopup()">Закрыть</button>
+</div>
+<script>
+    function openPopup() {
+        var popup = document.querySelector(".popup");
+        popup.style.display = "block";
+    }
+    function closePopup() {
+        var popup = document.querySelector(".popup");
+        popup.style.display = "none";
+    }
+</script>
+
 <script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
 <div class="news-list">
     <h1>Новости литературы</h1>

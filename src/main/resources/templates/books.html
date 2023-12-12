@@ -20,13 +20,13 @@
     </select>
     <button type="submit">Поиск</button>
 </form><br>
-<form th:action="@{/books}" th:method="get">
-    <input type="search" class="form-control ds-input" id="search-input" th:name="query" placeholder="Search..."
+<form th:action="@{/books}" th:method="get"style="width: 800px;">
+    <input type="search" class="form-control ds-input" id="search-input" th:name="query" placeholder="Введите название книги..."
            aria-label="Search for..." autocomplete="off" data-docs-version="4.3" spellcheck="false"
            role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0"
            dir="auto" style="position: relative; vertical-align: top;">
     <input type="hidden" name="city" th:value="${selectedCity}">
-</form>
+</form><br>
 <div class="container">
     <div class="row row-cols-3">
         <!-- Цикл для каждой книги -->
