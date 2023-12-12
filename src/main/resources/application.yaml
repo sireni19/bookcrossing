@@ -15,6 +15,20 @@ spring:
         format_sql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
+  mail:
+    username: pro100mishqa63@gmail.com
+    password: ENC(RyE4OJkyx5EDlEzbFRZ+P+ucXI72jJYmte97JABPSGOtJR8LoePQ7MqshzUKsmnoEVvXu74MJ2KSJkts2Fwo+w==)
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 jasypt:
   encryptor:

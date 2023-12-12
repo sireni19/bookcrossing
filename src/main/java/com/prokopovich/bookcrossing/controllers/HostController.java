@@ -13,7 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +38,13 @@ public class HostController {
 
     /*если какому-то из методов понадобится Location,
     то сработает метод createLocation, поместится в сессию и из сессии его можно будет забирать*/
-    @ModelAttribute("hostLocation")
-    public Location createHostLocation(Authentication authentication) {
-        String hostname = authentication.getName();
-        User host = userService.findUserByUsername(hostname);
-        Location hostLocation = host.getLocation();
-        return hostLocation;
-    }
+//    @ModelAttribute("hostLocation")
+//    public Location createHostLocation(Authentication authentication) {
+//        String hostname = authentication.getName();
+//        User host = userService.findUserByUsername(hostname);
+//        Location hostLocation = host.getLocation();
+//        return hostLocation;
+//    }
 
     @GetMapping("/main")
     public String showActionsPage(Model model, HttpSession httpSession,
