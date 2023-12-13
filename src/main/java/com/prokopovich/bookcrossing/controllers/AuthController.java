@@ -1,6 +1,8 @@
 package com.prokopovich.bookcrossing.controllers;
 
 import com.prokopovich.bookcrossing.dto.UserDetailsImplDto;
+import com.prokopovich.bookcrossing.entities.User;
+import com.prokopovich.bookcrossing.servicesimpl.GMailSenderService;
 import com.prokopovich.bookcrossing.servicesimpl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -9,15 +11,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @AllArgsConstructor
 public class AuthController {
-    //TODO check LOGIN logic
     private UserServiceImpl userService;
+    private GMailSenderService senderService;
     @GetMapping("/index")
     public String home() {
         return "index";
@@ -53,9 +53,27 @@ public class AuthController {
             model.addAttribute("errors", result.getAllErrors());
             return "register";
         }
-        userService.saveUser(user);
-        //TODO
-//       emailService.sendSimpleMessage(user.getEmail(),"TEST 123", "TEST123");
+        User userApp = userService.saveUser(user);
+        model.addAttribute("user_id",userApp.getId());
+        String to = user.getUsername();// потому что логирование по username в UserDetailsImplDto
+        String activationHtml = "<html xmlns:th=\"http://www.thymeleaf.org\">\n<body>"
+                + "<h1>Thanks for registration!</h1>"
+                + "<p>Push the button to activate your account:</p>"
+                + "<form action=\"http://localhost:8080/bcross/register/activation\" method=\"get\">\n"
+                + "    <input type=\"hidden\" name=\"user_id\" th:value=\"${user_id}\" />\n"
+                + "    <button type=\"submit\">Activation</button>\n"
+                + "</form>\n"
+                + "</body></html>";
+
+        senderService.sendActivationHTML(to,"Активация аккаунта",activationHtml);
+
         return "redirect:/register?success";
+    }
+    @GetMapping("/register/activation")
+    //TODO не запускает метод
+    public void activation(@RequestParam("user_id")Integer idToActivation){
+        System.out.println("post");
+        userService.activate(idToActivation);
+        System.out.println("Success");
     }
 }

@@ -21,5 +21,7 @@ public interface UserService {
     void setHostLocation(Integer locId,String username) throws HostException;
 
     User findUserByEmail(String email);
-    void saveUser(UserDetailsImplDto dto);
+    User saveUser(UserDetailsImplDto dto);
+
+    void activate(Integer id);
 }

@@ -12,8 +12,6 @@ import com.prokopovich.bookcrossing.repositories.UserRepository;
 import com.prokopovich.bookcrossing.services.UserService;
 import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,14 +135,19 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void saveUser(UserDetailsImplDto dto) {
+    public User saveUser(UserDetailsImplDto dto) {
         User user = new User();
         user.setUsername(dto.getEmail().trim());
         user.setEmail(dto.getUsername().trim());
-
         //encrypt the password once we integrate spring security
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public void activate(Integer id) {
+        userRepository.activationById(id);
     }
 }
 

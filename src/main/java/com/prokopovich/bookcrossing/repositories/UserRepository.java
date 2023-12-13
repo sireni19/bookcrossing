@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
     Optional<User> findUserByUsername(String username);
@@ -33,6 +34,12 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     void setHostLocation(@Param("location") Location location, @Param("username") String username);
 
     Optional<User> findUserByEmail(String email);
+
     User save(User user);
+
+    @Modifying
+    @Query("update User u set u.isActive=true where u.id=:number")
+    @Transactional
+    void activationById(@Param("number") Integer number);
 
 }

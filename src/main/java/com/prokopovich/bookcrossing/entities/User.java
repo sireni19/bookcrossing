@@ -24,6 +24,8 @@ public class User implements Serializable {
     private Role role = Role.USER_ROLE; //by default will be USER_ROLE
     @OneToOne(mappedBy = "user")
     private Book book;
+    @Column(name = "is_active",nullable = true)
+    private boolean isActive=false;//by default user is inactive
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id")

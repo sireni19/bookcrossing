@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/index").permitAll()
                         .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
+                        .requestMatchers("/send-feedback").permitAll()
                         .anyRequest().authenticated()))
                 .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/main").permitAll())
                 .logout((logout) -> logout.invalidateHttpSession(true)

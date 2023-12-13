@@ -13,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-//import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -233,10 +232,5 @@ public class HostController {
         return "redirect:/host/actions/main";
     }
 
-
-    @GetMapping("/go")
-    public String go() {
-        return "go";
-    }
 }
 
