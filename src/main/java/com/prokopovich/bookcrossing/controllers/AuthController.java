@@ -20,7 +20,7 @@ public class AuthController {
     private GMailSenderService senderService;
     @GetMapping("/index")
     public String home() {
-        return "index";
+        return "chat";
     }
 
     @GetMapping("/login")
