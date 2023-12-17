@@ -28,6 +28,13 @@ spring:
           auth: true
           starttls:
             enable: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: chat
+
+
 
 
 jasypt:

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookcrosing Chat</title>
@@ -12,7 +12,7 @@
         <h1 class="title">Type your username to enter the Chatroom</h1>
         <form id="usernameForm" name="usernameForm">
             <div class="form-group">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
+                <input type="hidden" id="name" placeholder="Username" name="name"  th:value="${name}" class="form-control" />
             </div>
             <div class="form-group">
                 <button type="submit" class="accent username-submit">Start Chatting</button>

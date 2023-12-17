@@ -131,8 +131,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
         </dependency>
-
 <!--        6]-->
+<!--        [7 mongo db-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+<!--        7]-->
     </dependencies>
 
     <build>

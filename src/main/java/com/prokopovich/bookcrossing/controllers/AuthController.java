@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private UserServiceImpl userService;
     private GMailSenderService senderService;
-    @GetMapping("/index")
-    public String home() {
-        return "chat";
-    }
+
 
     @GetMapping("/login")
     public String loginForm() {

@@ -1,7 +1,6 @@
 package com.prokopovich.bookcrossing.controllers;
 
 import com.prokopovich.bookcrossing.dto.BookDto;
-import com.prokopovich.bookcrossing.entities.Book;
 import com.prokopovich.bookcrossing.services.BookService;
 import com.prokopovich.bookcrossing.services.CityService;
 import com.prokopovich.bookcrossing.utils.BookUtils;
