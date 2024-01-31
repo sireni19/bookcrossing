@@ -19,8 +19,8 @@ public interface LocationRepository extends CrudRepository<Location, Integer> {
     void deleteLoc(String ad);
 
     @Modifying
-    @Query("UPDATE Location l SET l.address = :address WHERE l.id = :id")
-    void updateLocation(@Param("id") Integer id, @Param("address") String address);
+    @Query("UPDATE Location l SET l.address = :address, l.description= :description WHERE l.id = :id")
+    void updateLocation(@Param("id") Integer id, @Param("address") String address,@Param("description")String description);
 
     @Query("SELECT l FROM Location l  WHERE l.city = :city")
     List<Location> findLocationsByCity(@Param("city") City city);

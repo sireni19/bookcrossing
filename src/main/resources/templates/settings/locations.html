@@ -13,6 +13,11 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<div th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+
+</div>
 <div class="container">
     <div th:replace="~{settings/navigation :: navigation(Locations) }"/>
     <table>

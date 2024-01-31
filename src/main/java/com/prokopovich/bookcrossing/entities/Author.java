@@ -22,7 +22,7 @@ public class Author implements Serializable {
     private Integer id;
     @Column(name = "author_name",nullable = true)
     private String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "author_id")
     private List<Book> bookList;

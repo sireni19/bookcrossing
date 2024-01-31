@@ -35,12 +35,13 @@ public class AdminController {
     private UserService userService;
     private Geocoder geocoder;
 
+
     @Autowired
     public AdminController(CityService cityService, LocationService locationService, UserService userService, Geocoder geocoder) {
         this.cityService = cityService;
         this.locationService = locationService;
         this.userService = userService;
-        this.geocoder = geocoder;
+        this.geocoder=geocoder;
     }
 
     @GetMapping("")
@@ -58,8 +59,7 @@ public class AdminController {
     @PostMapping("/cities/newcity")
     public String addCity(@RequestParam("name") String name, Model model) {
         try {
-            City city = new City(name);
-            cityService.addCity(city);
+            cityService.addCity(name);
             return "redirect:/admin/actions/cities";
         } catch (DuplicateCityException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
@@ -84,8 +84,6 @@ public class AdminController {
                                 .map(Location::getAddress)  // value - list of addresses(List<Strings>)
                                 .collect(Collectors.toList()) // the address list is going to the new list.
                 ));
-
-
         model.addAttribute("addressesInCity", cityAddressMap);
         return "settings/locations";
     }
@@ -94,26 +92,11 @@ public class AdminController {
     public String addLocation(@RequestParam(name = "newAddress") String newAddress,@RequestParam(name = "name") String name,
                               @RequestParam(name = "cityName") String cityName,
                               @RequestParam(name = "description",required = false)String description,Model model) {
-        Location location = new Location(newAddress);
-        City city = cityService.findCityByName(cityName);
-        String fullAddress =cityName+", "+newAddress;
-        if (city != null) {
-            location.setCity(city);
-        }
         try {
-            location.setName(name);
-            String response = geocoder.GeocodeSync(fullAddress);
-            String coordinates = geocoder.extractCoordinates(response);
-            location.setCoordinates(coordinates);
-            location.setDescription(description);
-            locationService.saveLocation(location);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            locationService.saveLocation(newAddress,name,cityName,description);
         } catch (DuplicateLocationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "settings/error";
+            model.addAttribute("error",e.getMessage());
+            return "redirect:/admin/actions/locations";
         }
         return "redirect:/admin/actions/locations";
     }
@@ -132,7 +115,7 @@ public class AdminController {
     public String updateLocation(@ModelAttribute(value = "updloc")Location location, @RequestParam(value = "updcity",required = false)String cName,
                                  @RequestParam(name = "locId",required = false)Integer locId,@RequestParam(name = "hostId",required = false)Integer hostId,
                                  @RequestParam(name = "query",required = false)String username,
-                                 Model model) throws JsonProcessingException {
+                                 Model model) throws IOException, InterruptedException {
         if(hostId !=null&&locId==null){
             userService.deleteHostLocation(hostId);
         }
@@ -144,8 +127,8 @@ public class AdminController {
                 return "settings/error";
             }
         }
-        String street=location.getAddress();
-        String coordinates=geocoder.extractCoordinates(street);
+        String street=cName+" "+location.getAddress();
+        String coordinates=geocoder.extractCoordinates(geocoder.GeocodeSync(street));
         location.setCoordinates(coordinates);
         City city = cityService.findCityByName(cName);
         location.setCity(city);

@@ -145,9 +145,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public void activate(Integer id) {
-        userRepository.activationById(id);
-    }
+//    @Override
+//    public void activate(Integer id) {
+//        userRepository.activationById(id);
+//    }
 }
 

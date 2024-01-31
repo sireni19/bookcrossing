@@ -66,11 +66,11 @@ public class AuthController {
 
         return "redirect:/register?success";
     }
-    @GetMapping("/register/activation")
-    //TODO не запускает метод
-    public void activation(@RequestParam("user_id")Integer idToActivation){
-        System.out.println("post");
-        userService.activate(idToActivation);
-        System.out.println("Success");
-    }
+//    @GetMapping("/register/activation")
+//    //TODO не запускает метод
+//    public void activation(@RequestParam("user_id")Integer idToActivation){
+//        System.out.println("post");
+//        userService.activate(idToActivation);
+//        System.out.println("Success");
+//    }
 }

@@ -23,5 +23,5 @@ public interface UserService {
     User findUserByEmail(String email);
     User saveUser(UserDetailsImplDto dto);
 
-    void activate(Integer id);
+//    void activate(Integer id);
 }

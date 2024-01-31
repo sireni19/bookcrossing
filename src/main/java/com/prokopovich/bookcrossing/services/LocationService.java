@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LocationService {
 
-    void saveLocation(Location location) throws DuplicateLocationException;
+    void saveLocation(String newAddress, String name, String cityName, String description) throws DuplicateLocationException;
     void deleteLocationByAddress(String address);
     Location findLocationByAddress(String name);
     void updateLocation(Location loc);

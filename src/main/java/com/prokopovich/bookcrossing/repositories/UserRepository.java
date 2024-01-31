@@ -37,9 +37,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     User save(User user);
 
-    @Modifying
-    @Query("update User u set u.isActive=true where u.id=:number")
-    @Transactional
-    void activationById(@Param("number") Integer number);
+//    @Modifying
+//    @Query("update User u set u.isActive=true where u.id=:number")
+//    @Transactional
+//    void activationById(@Param("number") Integer number);
 
 }

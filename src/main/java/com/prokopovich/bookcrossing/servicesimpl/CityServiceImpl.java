@@ -24,8 +24,9 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void addCity(City city) throws DuplicateCityException {
-        if(cityRepository.findCityByName(city.getName())==null){
+    public void addCity(String cityName) throws DuplicateCityException {
+        City city = new City(cityName);
+        if(cityRepository.findCityByName(cityName)==null){
             cityRepository.save(city);
         }else {
             throw new DuplicateCityException("City "+ city.getName() +" has been already exist");
@@ -36,7 +37,6 @@ public class CityServiceImpl implements CityService {
     public City findCityByName(String name) {
         return cityRepository.findCityByName(name);
     }
-
 
     @Override
     public void modifyCity(String newName, Integer id) {

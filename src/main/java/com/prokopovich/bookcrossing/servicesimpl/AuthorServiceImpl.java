@@ -8,18 +8,21 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository authorRepository;
+
     @Override
     public List<Author> getAllAuthors() {
         return authorRepository.findAllOrderByAuthorAsc();
     }
 
     @Override
-    public void addAuthor(Author author) throws DataIntegrityViolationException {
-            authorRepository.save(author);
+    public void addAuthor(String authorName) throws DataIntegrityViolationException {
+        Author author = new Author(authorName);
+        authorRepository.save(author);
     }
 
     @Override

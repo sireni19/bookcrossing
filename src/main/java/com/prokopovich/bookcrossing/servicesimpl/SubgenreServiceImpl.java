@@ -18,8 +18,9 @@ public class SubgenreServiceImpl implements SubgenreService {
     }
 
     @Override
-    public void addSubgenre(Subgenre subgenre) throws DataIntegrityViolationException {
-        subgenreRepository.save(subgenre);
+    public void addSubgenre(String subgenre) throws DataIntegrityViolationException {
+        Subgenre s = new Subgenre(subgenre.trim());
+        subgenreRepository.save(s);
     }
 
     @Override

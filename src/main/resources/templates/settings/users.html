@@ -29,7 +29,7 @@
             <p>Username: <span th:text="${uname}"></span></p>
             <p>Email: <span th:text="${requiredUser.email}"></span></p>
             <p>Role: <span th:text="${requiredUser.role}"></span></p>
-            <p>Activated: <span th:text="${requiredUser.isActive()}"></span></p>
+<!--            <p>Activated: <span th:text="${requiredUser.isActive()}"></span></p>-->
             <div th:if="${requiredUser.role.name()=='HOST_ROLE'&&requiredUser.location!=null}">
                 <p>Administrator in location: <span th:text="${requiredUser.location.address}"></span></p></p>
             </div>
@@ -61,7 +61,7 @@
         <p>Username: <span th:text="${updatedUser.username}"></span></p>
         <p>Email: <span th:text="${updatedUser.email}"></span></p>
         <p>Role: <span th:text="${updatedUser.role}"></span></p>
-        <p>Activated: <span th:text="${updatedUser.isActive()}"></span></p>
+<!--        <p>Activated: <span th:text="${updatedUser.isActive()}"></span></p>-->
     </div>
 </div>
 

@@ -1,24 +1,25 @@
 package com.prokopovich.bookcrossing.servicesimpl;
 
 import com.prokopovich.bookcrossing.dto.BookDto;
-import com.prokopovich.bookcrossing.entities.Book;
-import com.prokopovich.bookcrossing.entities.City;
-import com.prokopovich.bookcrossing.entities.Location;
+import com.prokopovich.bookcrossing.entities.*;
 
-import com.prokopovich.bookcrossing.entities.User;
 import com.prokopovich.bookcrossing.exceptions.DuplicateBookException;
-import com.prokopovich.bookcrossing.repositories.BookRepository;
-import com.prokopovich.bookcrossing.repositories.CityRepository;
-import com.prokopovich.bookcrossing.repositories.UserRepository;
+import com.prokopovich.bookcrossing.repositories.*;
+import com.prokopovich.bookcrossing.services.AuthorService;
 import com.prokopovich.bookcrossing.services.BookService;
+import com.prokopovich.bookcrossing.services.SubgenreService;
 import com.prokopovich.bookcrossing.utils.BookUtils;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -27,13 +28,29 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     private UserRepository userRepository;
     private CityRepository cityRepository;
+    private AuthorService authorService;
+    private SubgenreService subgenreService;
 
     @Override
     @Transactional
-    public void addBook(Book book) throws DuplicateBookException {//может его сделать boolean чтобы в зависимости от флага вызывался разный view?
+    public void addBook(Book book,String authorId, String subgenreId,MultipartFile image, HttpSession session) throws DuplicateBookException {//может его сделать boolean чтобы в зависимости от флага вызывался разный view?
         String title = book.getTitle();
         String isbn = book.getIsbn();
-        Location location = book.getLocation();// локация дается в книгу из залогиненного хоста
+        Location location = book.getLocation();// локация дается в книгу из залогиненого хоста
+        Author author1 = authorService.getAuthorById(Integer.parseInt(authorId));
+        Subgenre subgenre1 = subgenreService.getSubgenreById(Integer.parseInt(subgenreId));
+        book.setAuthor(author1);
+        book.setSubgenre(subgenre1);
+        if (!image.isEmpty()) {
+            try {
+                byte[] bytes = image.getBytes();
+                book.setImage(bytes);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Location bookLocation = (Location) session.getAttribute("hostLocation");
+        book.setLocation(bookLocation);
         if (bookRepository.existsBookByTitleAndIsbnAndLocation(title, isbn, location) == false) {
             bookRepository.save(book);
         } else {
@@ -88,8 +105,26 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void updateBook(Book book) {
-        bookRepository.updateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getImage());
+    public void updateBook(Book updatedBook, Integer bookId, MultipartFile image, String authorId, String subgenreId, HttpSession session) {
+        // Получить существующую книгу по bookId из базы данных
+        Book existingBook = findBookById(bookId);
+        existingBook.setTitle(updatedBook.getTitle());
+        existingBook.setAuthor(updatedBook.getAuthor());
+        if (!image.isEmpty()) {
+            try {
+                byte[] bytes = image.getBytes();
+                existingBook.setImage(bytes);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Location bookLocation = (Location) session.getAttribute("hostLocation");
+        Author author1 = authorService.getAuthorById(Integer.parseInt(authorId));
+        Subgenre subgenre1 = subgenreService.getSubgenreById(Integer.parseInt(subgenreId));
+        existingBook.setLocation(bookLocation);
+        existingBook.setAuthor(author1);
+        existingBook.setSubgenre(subgenre1);
+        bookRepository.updateBook(existingBook.getId(), existingBook.getTitle(), existingBook.getAuthor(), existingBook.getImage());
     }
 
     @Override
