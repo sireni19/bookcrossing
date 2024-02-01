@@ -77,9 +77,11 @@ public class BookServiceImpl implements BookService {
     public Book findBookByUserEmail(String email) throws EntityNotFoundException {
         Optional<User> optional = userRepository.findUserByEmail(email);
         User user = optional.orElseThrow(() -> new EntityNotFoundException("User not found with username:: " + email));
-        Optional<Book> optional2 = bookRepository.findBookByUser(user);
-        Book book = optional2.orElseThrow(() -> new EntityNotFoundException("User has not book"));
-        return book;
+        Book book = user.getBook();
+        if(book!=null){
+            return book;
+        }
+        return null;
     }
 
     @Override

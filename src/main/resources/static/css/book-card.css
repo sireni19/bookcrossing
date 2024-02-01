@@ -5,7 +5,7 @@
 }
 
 .col {
-    flex-basis: 300px; /* Расчет ширины колонки (50% минус отступы) */
+    flex-basis: 400px;
     margin-bottom: 20px;
 }
 

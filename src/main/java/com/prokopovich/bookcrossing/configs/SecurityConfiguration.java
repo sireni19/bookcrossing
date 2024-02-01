@@ -33,11 +33,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests((requests -> requests
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN_ROLE")
+                        .requestMatchers("/host/**").hasAuthority("HOST_ROLE")
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/index").permitAll()
                         .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
-                        .requestMatchers("/send-feedback").permitAll()
-                        .anyRequest().authenticated()))
+                        .requestMatchers("/send-feedback").authenticated()
+                        .requestMatchers("/chat").authenticated()
+                        .anyRequest().permitAll()))
                 .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/main").permitAll())
                 .logout((logout) -> logout.invalidateHttpSession(true)
                         .clearAuthentication(true)

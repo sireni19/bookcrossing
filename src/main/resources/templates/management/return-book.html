@@ -17,8 +17,8 @@
   <div class="container">
     <div th:replace="~{management/host-navigation :: navigation('Главная')}"/>
   </div>
-  <div th:if="${param.fail}">
-    <p>Error message: <span th:text="${param.fail}"></span></p>
+  <div th:if="${fail}">
+    <p>Error message: <span th:text="${fail}"></span></p>
   </div>
   <div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh;">
     <form th:action="@{/host/actions/find2}" method="get" style="text-align: center;">
@@ -26,20 +26,19 @@
       <button th:type="submit" class="btn btn-success">Найти пользователя</button>
     </form>
   </div>
-  <div th:if="${userbook}!=null">
-    <div>
-      <h2 th:text="${userbook.title}"></h2>
-      <p th:text="'Жанр: ' + ${userbook.getSubgenre().name}"></p>
-      <p th:text="'Автор: ' + ${userbook.author.name}"></p>
-      <p th:text="'ISBN: ' + ${userbook.isbn}"></p>
-      <p th:text="'Предыдущий адрес: ' + ${userbook.getLocation().address}"></p>
-    </div>
-    <form th:action="@{/host/actions/deluser/{bookId}(bookId=${userbook.getId()})}" method="post">
-          <input type="hidden" name="_method" value="PUT">
-      <button th:type="submit" class="btn btn-success">Принять книгу</button>
-    </form>
-  </div>
-
+<!--  <div th:if="${userbook.getId()>0}">-->
+<!--    <div>-->
+<!--      <h2 th:text="${userbook.title}"></h2>-->
+<!--      <p th:text="'Жанр: ' + ${userbook.getSubgenre().name}"></p>-->
+<!--      <p th:text="'Автор: ' + ${userbook.author.name}"></p>-->
+<!--      <p th:text="'ISBN: ' + ${userbook.isbn}"></p>-->
+<!--      <p th:text="'Предыдущий адрес: ' + ${userbook.getLocation().address}"></p>-->
+<!--    </div>-->
+<!--    <form th:action="@{/host/actions/deluser/{bookId}(bookId=${userbook.getId()})}" method="post">-->
+<!--      <input type="hidden" name="_method" value="PUT">-->
+<!--      <button th:type="submit" class="btn btn-success">Принять книгу</button>-->
+<!--    </form>-->
+<!--  </div>-->
 </div>
 </body>
 </html>

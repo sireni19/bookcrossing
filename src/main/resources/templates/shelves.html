@@ -13,10 +13,10 @@
 <body>
 <script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
 
-<h3 th:text="${loc.getName()}"></h3>
+<h2 th:text="${loc.getName()}"style="margin-left: 700px"></h2>
 <script src="bcross/static/js/maponepoint.js" type="text/javascript" th:attr="xy=${coordinates}, address=${address}"></script>
-<div id="app" style="width: 600px; height: 300px;"></div>
-<p th:text="${loc.getAddress()}"></p>
+<div id="app" style="width: 600px; height: 300px;margin-left: 700px" ></div>
+<h4 th:text="${loc.getAddress()}"style="margin-left: 700px"></h4>
 <div class="descriptions">
 <h4 th:text="Описание"></h4>
     <p th:text="${loc.description}"></p>

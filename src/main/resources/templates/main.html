@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Буккроссинг</title>
@@ -22,21 +23,25 @@
 
 <body>
 <br>
-<button id="openButton" class="custom-button" onclick="openPopup()">О проекте</button>
-<div id="popup" class="popup" style="display: none;
+<button id="openButton" onclick="openPopup()" style="margin-left: 320px;">О проекте</button>
+<div id="popup" class="popup" style="
+        display: none;
         position: absolute;
-        top: 50%;
+        top: 80%;
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: #ffe2ca;
         padding: 20px;
         border: 1px solid black;
-        z-index: 9999;">
+        z-index: 9999;
+        width: 900px;
+        height: 600px;">
     <!-- Содержимое всплывающего окна -->
     <h3 style="font-size: 24px;font-weight: bold; color: #333333; margin-bottom: 10px;">Дополнительная информация</h3>
     <p style=" font-size: 16px; line-height: 1.5;color: #000000;">Текст дополнительной информации...</p>
     <button onclick="closePopup()">Закрыть</button>
 </div>
+
 <script>
     function openPopup() {
         var popup = document.querySelector(".popup");
@@ -47,6 +52,24 @@
         popup.style.display = "none";
     }
 </script>
+<div class="button-row">
+    <div sec:authorize="hasAuthority('ADMIN_ROLE')">
+        <form action="/bcross/admin/actions" method="GET">
+            <button class="custom-button admin" type="submit">Кабинет администратора</button>
+        </form>
+    </div>
+    <br>
+    <div sec:authorize="hasAuthority('HOST_ROLE')">
+        <form action="/bcross/host/actions/main" method="GET">
+            <button class="custom-button host" type="submit">Кабинет управляющего</button>
+        </form>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <form id="chat" action="/bcross/chat" method="get">
+            <button class="custom-button chat" type="submit">Общий чат</button>
+        </form>
+    </div>
+</div>
 
 <script src="bcross/static/js/menu-script.js" type="text/javascript" th:media="all"></script>
 <div class="news-list">

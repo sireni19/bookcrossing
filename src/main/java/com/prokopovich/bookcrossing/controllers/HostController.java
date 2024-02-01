@@ -34,7 +34,6 @@ import java.util.stream.IntStream;
 public class HostController {
     private AuthorService authorService;
     private SubgenreService subgenreService;
-    private UserService userService;
     private BookService bookService;
 
     /*если какому-то из методов понадобится Location,
@@ -79,7 +78,7 @@ public class HostController {
     public String addBook(@ModelAttribute(name = "newBook") Book book, @RequestParam(name = "img") MultipartFile image, HttpSession session, Model model,
                           @RequestParam(name = "author") String authorId, @RequestParam(name = "subgenre") String subgenreId) {
         try {
-            bookService.addBook(book, authorId, subgenreId,image,session);
+            bookService.addBook(book, authorId, subgenreId, image, session);
         } catch (DuplicateBookException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "settings/error";
@@ -142,27 +141,27 @@ public class HostController {
     }
 
     @GetMapping("/return")
-    public String showReturnBookForm() {
+    public String showReturnBookForm(Model model) {
         return "management/return-book";
     }
 
     @GetMapping("/find2")
-    public String findUserBook(@RequestParam(name = "useremail") String email, Model model) {
+    public String findUserBook(@RequestParam(name = "useremail") String email, Model model,HttpSession httpSession) {
         try {
             Book book = bookService.findBookByUserEmail(email);
-            model.addAttribute("userbook", book);
+            if (book != null) {
+                bookService.clearUserSetNewLocationToBook((Location) httpSession.getAttribute("hostLocation"), book.getId());
+                return "management/return-book";
+            } else {
+                model.addAttribute("fail", "У этого пользователя нет книги");
+                return "management/return-book";
+            }
         } catch (EntityNotFoundException e) {
             String errorMessage = e.getMessage();
-            return "redirect:/host/actions/return?fail=" + errorMessage;
+            model.addAttribute("fail", errorMessage);
+            return "management/return-book";
         }
 
-        return "management/return-book";
-    }
-
-    @PutMapping("/deluser/{bookId}")
-    public String updateBookDeleteUser(HttpSession httpSession, @PathVariable Integer bookId) {
-        bookService.clearUserSetNewLocationToBook((Location) httpSession.getAttribute("hostLocation"), bookId);
-        return "redirect:/host/actions/return";
     }
 
     @GetMapping("/updateform{id}")

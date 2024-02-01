@@ -1,17 +1,29 @@
-.custom-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    background-color: #ff3366;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    background-color: #cc0044;
-    float: right;
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     margin-right: 300px;
+}
+
+.custom-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #f8f8f6;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button.admin {
+    background-color: #ff0000;
+}
+
+.custom-button.host {
+    background-color: #cca115;
+}
+
+.custom-button.chat {
+    background-color: #84bd12;
 }
